@@ -1,1 +1,13 @@
 .DS_Store
+
+# Nix
+result
+.direnv/
+
+# Build artifacts
+echo-http/echo-http
+echo-grpc/echo-grpc
+echo-graphql/echo-graphql
+
+# Environment
+.env
