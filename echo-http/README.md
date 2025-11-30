@@ -1,5 +1,8 @@
 # echo-http
 
+[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml)
+[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml)
+
 HTTP echo server for testing HTTP clients.
 
 ## Image
@@ -42,6 +45,8 @@ docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/jsr-probitas/echo-http:
 | `/status/{code}`   | GET    | Return specified status code (100-599)    |
 | `/delay/{seconds}` | GET    | Echo after delay                          |
 | `/health`          | GET    | Health check                              |
+
+See [docs/api.md](./docs/api.md) for detailed API reference.
 
 ## Response Format
 

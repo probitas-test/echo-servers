@@ -1,15 +1,19 @@
 # Probitas Test Servers
 
+[![Build echo-http](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml)
+[![Build echo-grpc](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml)
+[![Build echo-graphql](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml)
+
 Docker images for testing [Probitas](https://github.com/jsr-probitas/probitas)
 clients.
 
 ## Images
 
-| Image                               | Protocol | Default Port |
-| ----------------------------------- | -------- | ------------ |
-| `ghcr.io/jsr-probitas/echo-http`    | HTTP     | 80           |
-| `ghcr.io/jsr-probitas/echo-grpc`    | gRPC     | 50051        |
-| `ghcr.io/jsr-probitas/echo-graphql` | GraphQL  | 8080         |
+| Image                               | Protocol | Default Port | Status                                                                                                                                                                                              |
+| ----------------------------------- | -------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ghcr.io/jsr-probitas/echo-http`    | HTTP     | 80           | [![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml)       |
+| `ghcr.io/jsr-probitas/echo-grpc`    | gRPC     | 50051        | [![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml)       |
+| `ghcr.io/jsr-probitas/echo-graphql` | GraphQL  | 8080         | [![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml) |
 
 ## Quick Start
 

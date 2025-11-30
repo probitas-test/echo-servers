@@ -1,5 +1,8 @@
 # echo-graphql
 
+[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml)
+[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml)
+
 GraphQL echo server for testing GraphQL clients.
 
 ## Image
@@ -63,6 +66,8 @@ type Subscription {
   countdown(from: Int!): Int!
 }
 ```
+
+See [docs/api.md](./docs/api.md) for detailed API reference.
 
 ## Features
 

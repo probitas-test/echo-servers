@@ -1,5 +1,8 @@
 # echo-grpc
 
+[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml)
+[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml)
+
 gRPC echo server for testing gRPC clients.
 
 ## Image
@@ -44,6 +47,8 @@ service Echo {
   rpc BidirectionalStream (stream EchoRequest) returns (stream EchoResponse);
 }
 ```
+
+See [docs/api.md](./docs/api.md) for detailed API reference.
 
 ## Features
 
