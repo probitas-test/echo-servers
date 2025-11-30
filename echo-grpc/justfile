@@ -1,0 +1,33 @@
+[private]
+default:
+    @just --list
+
+# Run linter
+lint:
+    golangci-lint run ./...
+
+# Run tests
+test:
+    go test -v ./...
+
+# Build binary (runs go generate first)
+build:
+    go generate ./...
+    go build -o echo-grpc .
+
+# Run server locally
+run:
+    go run .
+
+# Format code
+fmt:
+    go fmt ./...
+    goimports -w .
+
+# Clean build artifacts
+clean:
+    rm -f echo-grpc
+
+# Tidy dependencies
+tidy:
+    go mod tidy

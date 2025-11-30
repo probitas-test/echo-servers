@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+// Echo service with various RPC patterns
+service Echo {
+  // Unary RPCs
+  rpc Echo (EchoRequest) returns (EchoResponse);
+  rpc EchoWithDelay (EchoWithDelayRequest) returns (EchoResponse);
+  rpc EchoError (EchoErrorRequest) returns (EchoResponse);
+
+  // Streaming RPCs
+  rpc ServerStream (ServerStreamRequest) returns (stream EchoResponse);
+  rpc ClientStream (stream EchoRequest) returns (EchoResponse);
+  rpc BidirectionalStream (stream EchoRequest) returns (stream EchoResponse);
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoResponse {
+  string message = 1;
+  map<string, string> metadata = 2;  // Echo back request metadata
+}
+
+message EchoWithDelayRequest {
+  string message = 1;
+  int32 delay_ms = 2;
+}
+
+message EchoErrorRequest {
+  string message = 1;
+  int32 code = 2;        // gRPC status code (0-16)
+  string details = 3;    // Error details message
+}
+
+message ServerStreamRequest {
+  string message = 1;
+  int32 count = 2;       // Number of responses to stream
+  int32 interval_ms = 3; // Interval between responses
+}
