@@ -9,6 +9,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -94,8 +95,8 @@ func (r *queryResolver) EchoError(ctx context.Context, message string) (string, 
 func (r *queryResolver) EchoPartialError(ctx context.Context, messages []string) ([]*model.EchoResult, error) {
 	results := make([]*model.EchoResult, len(messages))
 	for i, msg := range messages {
-		if msg == "error" {
-			errMsg := "intentional error for message at index " + strconv.Itoa(i)
+		if strings.Contains(strings.ToLower(msg), "error") {
+			errMsg := "message contains 'error'"
 			results[i] = &model.EchoResult{
 				Error: &errMsg,
 			}

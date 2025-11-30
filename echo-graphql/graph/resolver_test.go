@@ -105,6 +105,8 @@ func TestEchoPartialError_ReturnsMixedResults(t *testing.T) {
 	}
 	if resp.EchoPartialError[1].Error == nil {
 		t.Error("expected second error to be non-nil")
+	} else if *resp.EchoPartialError[1].Error != "message contains 'error'" {
+		t.Errorf("expected error message 'message contains 'error'', got %q", *resp.EchoPartialError[1].Error)
 	}
 
 	// Third result: "world" - should have message, no error
@@ -113,6 +115,59 @@ func TestEchoPartialError_ReturnsMixedResults(t *testing.T) {
 	}
 	if resp.EchoPartialError[2].Error != nil {
 		t.Errorf("expected third error to be nil, got %v", resp.EchoPartialError[2].Error)
+	}
+}
+
+func TestEchoPartialError_ContainsErrorSubstring(t *testing.T) {
+	c := setupTestClient(t)
+
+	testCases := []struct {
+		input       string
+		shouldError bool
+	}{
+		{"success", false},
+		{"error", true},
+		{"ERROR", true},
+		{"this is an error message", true},
+		{"errorHandling", true},
+		{"no problem here", false},
+		{"Error: something went wrong", true},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.input, func(t *testing.T) {
+			var resp struct {
+				EchoPartialError []struct {
+					Message *string
+					Error   *string
+				}
+			}
+			query := `query { echoPartialError(messages: ["` + tc.input + `"]) { message error } }`
+			c.MustPost(query, &resp)
+
+			if len(resp.EchoPartialError) != 1 {
+				t.Fatalf("expected 1 result, got %d", len(resp.EchoPartialError))
+			}
+
+			result := resp.EchoPartialError[0]
+			if tc.shouldError {
+				if result.Message != nil {
+					t.Errorf("expected message to be nil for %q, got %v", tc.input, *result.Message)
+				}
+				if result.Error == nil {
+					t.Errorf("expected error to be non-nil for %q", tc.input)
+				} else if *result.Error != "message contains 'error'" {
+					t.Errorf("expected error message 'message contains 'error'', got %q", *result.Error)
+				}
+			} else {
+				if result.Message == nil || *result.Message != tc.input {
+					t.Errorf("expected message to be %q, got %v", tc.input, result.Message)
+				}
+				if result.Error != nil {
+					t.Errorf("expected error to be nil for %q, got %v", tc.input, *result.Error)
+				}
+			}
+		})
 	}
 }
 
