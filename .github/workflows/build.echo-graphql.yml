@@ -1,0 +1,44 @@
+name: Build echo-graphql
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "echo-graphql/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-graphql.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "echo-graphql/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-graphql.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-graphql::lint
+      - run: nix develop -c just echo-graphql::fmt
+      - run: git diff --exit-code
+
+  test:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-graphql::test
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-graphql::build

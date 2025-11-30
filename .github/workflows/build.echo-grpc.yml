@@ -1,0 +1,44 @@
+name: Build echo-grpc
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "echo-grpc/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-grpc.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "echo-grpc/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-grpc.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-grpc::lint
+      - run: nix develop -c just echo-grpc::fmt
+      - run: git diff --exit-code
+
+  test:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-grpc::test
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-grpc::build
