@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	Host string
-	Port string
+	Host                  string
+	Port                  string
+	ReflectionIncludeDeps bool
 }
 
 func LoadConfig() *Config {
@@ -16,8 +17,9 @@ func LoadConfig() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		Host: getEnv("HOST", "0.0.0.0"),
-		Port: getEnv("PORT", "50051"),
+		Host:                  getEnv("HOST", "0.0.0.0"),
+		Port:                  getEnv("PORT", "50051"),
+		ReflectionIncludeDeps: getEnvBool("REFLECTION_INCLUDE_DEPENDENCIES", false),
 	}
 }
 
@@ -30,4 +32,20 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+func getEnvBool(key string, defaultValue bool) bool {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+
+	switch value {
+	case "1", "true", "TRUE", "True", "yes", "YES", "on", "ON":
+		return true
+	case "0", "false", "FALSE", "False", "no", "NO", "off", "OFF":
+		return false
+	default:
+		return defaultValue
+	}
 }
