@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+message EchoLargePayloadRequest {
+  int32 size_bytes = 1;  // Size of payload to return (max 10MB)
+  string pattern = 2;    // Optional: pattern to repeat (default: 'X')
+}
+
+message EchoLargePayloadResponse {
+  bytes payload = 1;
+  int32 actual_size = 2;
+}

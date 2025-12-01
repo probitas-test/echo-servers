@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+message ErrorDetail {
+  string type = 1;
+  repeated FieldViolation field_violations = 2;
+  int64 retry_delay_ms = 3;
+  repeated string stack_entries = 4;
+  string debug_detail = 5;
+  repeated QuotaViolation quota_violations = 6;
+}
+
+message FieldViolation {
+  string field = 1;
+  string description = 2;
+}
+
+message QuotaViolation {
+  string subject = 1;
+  string description = 2;
+}
