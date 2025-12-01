@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+message EchoDeadlineRequest {
+  string message = 1;
+}
+
+message EchoDeadlineResponse {
+  string message = 1;
+  int64 deadline_remaining_ms = 2;  // -1 if no deadline set
+  bool has_deadline = 3;
+}

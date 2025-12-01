@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+message MetadataValues {
+  repeated string values = 1;
+}
+
+message EchoRequestMetadataRequest {
+  // Optional: filter to specific metadata keys (empty = return all)
+  repeated string keys = 1;
+}
+
+message EchoRequestMetadataResponse {
+  // All request metadata as key-value pairs
+  map<string, MetadataValues> metadata = 1;
+}
+
+// EchoWithTrailers - Return response with trailing metadata
+message EchoWithTrailersRequest {
+  string message = 1;
+  map<string, string> trailers = 2;  // Trailers to send with response
+}

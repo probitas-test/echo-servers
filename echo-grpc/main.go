@@ -1,5 +1,3 @@
-//go:generate protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/echo.proto
-
 package main
 
 import (
@@ -8,7 +6,6 @@ import (
 
 	"google.golang.org/grpc"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
-	"google.golang.org/grpc/reflection"
 
 	pb "github.com/jsr-probitas/dockerfiles/echo-grpc/proto"
 	"github.com/jsr-probitas/dockerfiles/echo-grpc/server"
@@ -33,7 +30,7 @@ func main() {
 	healthpb.RegisterHealthServer(s, healthServer)
 
 	// Enable server reflection (v1 and v1alpha)
-	reflection.Register(s)
+	server.RegisterReflection(s, cfg.ReflectionIncludeDeps)
 
 	log.Printf("Starting server on %s", cfg.Addr())
 	if err := s.Serve(lis); err != nil {

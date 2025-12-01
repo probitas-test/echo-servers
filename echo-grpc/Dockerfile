@@ -12,9 +12,9 @@ RUN go mod download
 COPY . .
 
 # Generate proto files
-RUN protoc --go_out=. --go_opt=paths=source_relative \
-    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    proto/echo.proto
+RUN protoc -I proto --go_out=proto --go_opt=paths=source_relative \
+    --go-grpc_out=proto --go-grpc_opt=paths=source_relative \
+    proto/*.proto
 
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o echo-grpc .
 

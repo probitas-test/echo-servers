@@ -19,10 +19,9 @@ docker run -p 50051:50051 ghcr.io/jsr-probitas/echo-grpc:latest
 
 ## Environment Variables
 
-| Variable | Default   | Description  |
-| -------- | --------- | ------------ |
-| `HOST`   | `0.0.0.0` | Bind address |
-| `PORT`   | `50051`   | Listen port  |
+- `HOST` (default `0.0.0.0`): Bind address
+- `PORT` (default `50051`): Listen port
+- `REFLECTION_INCLUDE_DEPENDENCIES` (default `false`): If `true`, server reflection returns transitive proto dependencies (standard gRPC behavior). Default `false` returns only the containing file to reproduce missing-import scenarios.
 
 ```bash
 # Custom port

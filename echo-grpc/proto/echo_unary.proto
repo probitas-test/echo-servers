@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/dockerfiles/echo-grpc/proto";
+
+import "echo_errors.proto";
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoWithDelayRequest {
+  string message = 1;
+  int32 delay_ms = 2;
+}
+
+message EchoErrorRequest {
+  string message = 1;
+  int32 code = 2;      // gRPC status code (0-16)
+  string details = 3;  // Error details message
+}
+
+// EchoErrorWithDetails - Return error with rich error details (google.rpc.Status)
+message EchoErrorWithDetailsRequest {
+  int32 code = 1;              // gRPC status code (0-16)
+  string message = 2;          // Error message
+  repeated ErrorDetail details = 3;  // Rich error details
+}
