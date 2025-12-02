@@ -1,7 +1,7 @@
 # echo-grpc
 
-[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-grpc.yml)
-[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-grpc.yml)
+[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml)
+[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml)
 
 gRPC echo server for testing gRPC clients.
 

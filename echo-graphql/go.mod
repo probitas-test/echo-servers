@@ -1,4 +1,4 @@
-module github.com/jsr-probitas/dockerfiles/echo-graphql
+module github.com/jsr-probitas/echo-servers/echo-graphql
 
 go 1.24.0
 

@@ -256,7 +256,7 @@ const file_echo_unary_proto_rawDesc = "" +
 	"\x1bEchoErrorWithDetailsRequest\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12.\n" +
-	"\adetails\x18\x03 \x03(\v2\x14.echo.v1.ErrorDetailR\adetailsB5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"\adetails\x18\x03 \x03(\v2\x14.echo.v1.ErrorDetailR\adetailsB6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var (
 	file_echo_unary_proto_rawDescOnce sync.Once

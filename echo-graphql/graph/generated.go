@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1134,7 +1134,7 @@ func (ec *executionContext) _Headers_all(ctx context.Context, field graphql.Coll
 			return ec.resolvers.Headers().All(ctx, obj)
 		},
 		nil,
-		ec.marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntryᚄ,
+		ec.marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntryᚄ,
 		true,
 		true,
 	)
@@ -1257,7 +1257,7 @@ func (ec *executionContext) _Mutation_createMessage(ctx context.Context, field g
 			return ec.resolvers.Mutation().CreateMessage(ctx, fc.Args["text"].(string))
 		},
 		nil,
-		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
 		true,
 		true,
 	)
@@ -1306,7 +1306,7 @@ func (ec *executionContext) _Mutation_updateMessage(ctx context.Context, field g
 			return ec.resolvers.Mutation().UpdateMessage(ctx, fc.Args["id"].(string), fc.Args["text"].(string))
 		},
 		nil,
-		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
 		true,
 		true,
 	)
@@ -1396,7 +1396,7 @@ func (ec *executionContext) _Mutation_batchCreateMessages(ctx context.Context, f
 			return ec.resolvers.Mutation().BatchCreateMessages(ctx, fc.Args["texts"].([]string))
 		},
 		nil,
-		ec.marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessageᚄ,
+		ec.marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessageᚄ,
 		true,
 		true,
 	)
@@ -1473,7 +1473,7 @@ func (ec *executionContext) _NestedEcho_child(ctx context.Context, field graphql
 			return obj.Child, nil
 		},
 		nil,
-		ec.marshalONestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho,
+		ec.marshalONestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho,
 		true,
 		false,
 	)
@@ -1632,7 +1632,7 @@ func (ec *executionContext) _Query_echoPartialError(ctx context.Context, field g
 			return ec.resolvers.Query().EchoPartialError(ctx, fc.Args["messages"].([]string))
 		},
 		nil,
-		ec.marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResultᚄ,
+		ec.marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResultᚄ,
 		true,
 		true,
 	)
@@ -1719,7 +1719,7 @@ func (ec *executionContext) _Query_echoHeaders(ctx context.Context, field graphq
 			return ec.resolvers.Query().EchoHeaders(ctx)
 		},
 		nil,
-		ec.marshalNHeaders2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders,
+		ec.marshalNHeaders2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders,
 		true,
 		true,
 	)
@@ -1759,7 +1759,7 @@ func (ec *executionContext) _Query_echoNested(ctx context.Context, field graphql
 			return ec.resolvers.Query().EchoNested(ctx, fc.Args["message"].(string), fc.Args["depth"].(int))
 		},
 		nil,
-		ec.marshalNNestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho,
+		ec.marshalNNestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho,
 		true,
 		true,
 	)
@@ -1806,7 +1806,7 @@ func (ec *executionContext) _Query_echoList(ctx context.Context, field graphql.C
 			return ec.resolvers.Query().EchoList(ctx, fc.Args["message"].(string), fc.Args["count"].(int))
 		},
 		nil,
-		ec.marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItemᚄ,
+		ec.marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItemᚄ,
 		true,
 		true,
 	)
@@ -2030,7 +2030,7 @@ func (ec *executionContext) _Subscription_messageCreated(ctx context.Context, fi
 			return ec.resolvers.Subscription().MessageCreated(ctx)
 		},
 		nil,
-		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
 		true,
 		true,
 	)
@@ -2109,7 +2109,7 @@ func (ec *executionContext) _Subscription_messageCreatedFiltered(ctx context.Con
 			return ec.resolvers.Subscription().MessageCreatedFiltered(ctx, fc.Args["textContains"].(*string))
 		},
 		nil,
-		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage,
 		true,
 		true,
 	)
@@ -4738,7 +4738,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EchoListItem) graphql.Marshaler {
+func (ec *executionContext) marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EchoListItem) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4762,7 +4762,7 @@ func (ec *executionContext) marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprob
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEchoListItem2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItem(ctx, sel, v[i])
+			ret[i] = ec.marshalNEchoListItem2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItem(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4782,7 +4782,7 @@ func (ec *executionContext) marshalNEchoListItem2ᚕᚖgithubᚗcomᚋjsrᚑprob
 	return ret
 }
 
-func (ec *executionContext) marshalNEchoListItem2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItem(ctx context.Context, sel ast.SelectionSet, v *model.EchoListItem) graphql.Marshaler {
+func (ec *executionContext) marshalNEchoListItem2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoListItem(ctx context.Context, sel ast.SelectionSet, v *model.EchoListItem) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -4792,7 +4792,7 @@ func (ec *executionContext) marshalNEchoListItem2ᚖgithubᚗcomᚋjsrᚑprobita
 	return ec._EchoListItem(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResultᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EchoResult) graphql.Marshaler {
+func (ec *executionContext) marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResultᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EchoResult) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4816,7 +4816,7 @@ func (ec *executionContext) marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobit
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEchoResult2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResult(ctx, sel, v[i])
+			ret[i] = ec.marshalNEchoResult2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResult(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4836,7 +4836,7 @@ func (ec *executionContext) marshalNEchoResult2ᚕᚖgithubᚗcomᚋjsrᚑprobit
 	return ret
 }
 
-func (ec *executionContext) marshalNEchoResult2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResult(ctx context.Context, sel ast.SelectionSet, v *model.EchoResult) graphql.Marshaler {
+func (ec *executionContext) marshalNEchoResult2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐEchoResult(ctx context.Context, sel ast.SelectionSet, v *model.EchoResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -4846,7 +4846,7 @@ func (ec *executionContext) marshalNEchoResult2ᚖgithubᚗcomᚋjsrᚑprobitas�
 	return ec._EchoResult(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.HeaderEntry) graphql.Marshaler {
+func (ec *executionContext) marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.HeaderEntry) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4870,7 +4870,7 @@ func (ec *executionContext) marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNHeaderEntry2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntry(ctx, sel, v[i])
+			ret[i] = ec.marshalNHeaderEntry2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntry(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4890,7 +4890,7 @@ func (ec *executionContext) marshalNHeaderEntry2ᚕᚖgithubᚗcomᚋjsrᚑprobi
 	return ret
 }
 
-func (ec *executionContext) marshalNHeaderEntry2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntry(ctx context.Context, sel ast.SelectionSet, v *model.HeaderEntry) graphql.Marshaler {
+func (ec *executionContext) marshalNHeaderEntry2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaderEntry(ctx context.Context, sel ast.SelectionSet, v *model.HeaderEntry) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -4900,11 +4900,11 @@ func (ec *executionContext) marshalNHeaderEntry2ᚖgithubᚗcomᚋjsrᚑprobitas
 	return ec._HeaderEntry(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNHeaders2githubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders(ctx context.Context, sel ast.SelectionSet, v model.Headers) graphql.Marshaler {
+func (ec *executionContext) marshalNHeaders2githubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders(ctx context.Context, sel ast.SelectionSet, v model.Headers) graphql.Marshaler {
 	return ec._Headers(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNHeaders2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders(ctx context.Context, sel ast.SelectionSet, v *model.Headers) graphql.Marshaler {
+func (ec *executionContext) marshalNHeaders2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐHeaders(ctx context.Context, sel ast.SelectionSet, v *model.Headers) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -4946,11 +4946,11 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNMessage2githubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v model.Message) graphql.Marshaler {
+func (ec *executionContext) marshalNMessage2githubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v model.Message) graphql.Marshaler {
 	return ec._Message(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Message) graphql.Marshaler {
+func (ec *executionContext) marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Message) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4974,7 +4974,7 @@ func (ec *executionContext) marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitas�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx, sel, v[i])
+			ret[i] = ec.marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4994,7 +4994,7 @@ func (ec *executionContext) marshalNMessage2ᚕᚖgithubᚗcomᚋjsrᚑprobitas�
 	return ret
 }
 
-func (ec *executionContext) marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v *model.Message) graphql.Marshaler {
+func (ec *executionContext) marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v *model.Message) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -5004,11 +5004,11 @@ func (ec *executionContext) marshalNMessage2ᚖgithubᚗcomᚋjsrᚑprobitasᚋd
 	return ec._Message(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNestedEcho2githubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v model.NestedEcho) graphql.Marshaler {
+func (ec *executionContext) marshalNNestedEcho2githubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v model.NestedEcho) graphql.Marshaler {
 	return ec._NestedEcho(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v *model.NestedEcho) graphql.Marshaler {
+func (ec *executionContext) marshalNNestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v *model.NestedEcho) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -5347,7 +5347,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalONestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋdockerfilesᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v *model.NestedEcho) graphql.Marshaler {
+func (ec *executionContext) marshalONestedEcho2ᚖgithubᚗcomᚋjsrᚑprobitasᚋechoᚑserversᚋechoᚑgraphqlᚋgraphᚋmodelᚐNestedEcho(ctx context.Context, sel ast.SelectionSet, v *model.NestedEcho) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

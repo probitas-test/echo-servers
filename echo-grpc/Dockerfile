@@ -19,7 +19,7 @@ RUN protoc -I proto --go_out=proto --go_opt=paths=source_relative \
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o echo-grpc .
 
 FROM scratch
-LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/dockerfiles"
+LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/echo-servers"
 LABEL org.opencontainers.image.description="gRPC echo server for testing gRPC clients"
 LABEL org.opencontainers.image.licenses="MIT"
 COPY --from=builder /app/echo-grpc /echo-grpc

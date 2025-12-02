@@ -1,7 +1,7 @@
 # echo-graphql
 
-[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-graphql.yml)
-[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-graphql.yml)
+[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml)
+[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml)
 
 GraphQL echo server for testing GraphQL clients.
 

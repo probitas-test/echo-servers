@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 
-	pb "github.com/jsr-probitas/dockerfiles/echo-grpc/proto"
+	pb "github.com/jsr-probitas/echo-servers/echo-grpc/proto"
 )
 
 func setupTestServer(t *testing.T) (pb.EchoClient, func()) {

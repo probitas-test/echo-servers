@@ -38,7 +38,7 @@ const file_echo_proto_rawDesc = "" +
 	"\x14EchoErrorWithDetails\x12$.echo.v1.EchoErrorWithDetailsRequest\x1a\x15.echo.v1.EchoResponse\x12E\n" +
 	"\fServerStream\x12\x1c.echo.v1.ServerStreamRequest\x1a\x15.echo.v1.EchoResponse0\x01\x12=\n" +
 	"\fClientStream\x12\x14.echo.v1.EchoRequest\x1a\x15.echo.v1.EchoResponse(\x01\x12F\n" +
-	"\x13BidirectionalStream\x12\x14.echo.v1.EchoRequest\x1a\x15.echo.v1.EchoResponse(\x010\x01B5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"\x13BidirectionalStream\x12\x14.echo.v1.EchoRequest\x1a\x15.echo.v1.EchoResponse(\x010\x01B6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var file_echo_proto_goTypes = []any{
 	(*EchoRequest)(nil),                 // 0: echo.v1.EchoRequest

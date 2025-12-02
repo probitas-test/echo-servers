@@ -84,7 +84,7 @@ const file_echo_response_proto_rawDesc = "" +
 	"\bmetadata\x18\x02 \x03(\v2#.echo.v1.EchoResponse.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var (
 	file_echo_response_proto_rawDescOnce sync.Once

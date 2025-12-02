@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/jsr-probitas/dockerfiles/echo-http/handlers"
+	"github.com/jsr-probitas/echo-servers/echo-http/handlers"
 )
 
 func main() {

@@ -136,7 +136,7 @@ const file_echo_deadline_proto_rawDesc = "" +
 	"\x14EchoDeadlineResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x122\n" +
 	"\x15deadline_remaining_ms\x18\x02 \x01(\x03R\x13deadlineRemainingMs\x12!\n" +
-	"\fhas_deadline\x18\x03 \x01(\bR\vhasDeadlineB5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"\fhas_deadline\x18\x03 \x01(\bR\vhasDeadlineB6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var (
 	file_echo_deadline_proto_rawDescOnce sync.Once

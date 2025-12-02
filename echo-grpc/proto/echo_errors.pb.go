@@ -227,7 +227,7 @@ const file_echo_errors_proto_rawDesc = "" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"L\n" +
 	"\x0eQuotaViolation\x12\x18\n" +
 	"\asubject\x18\x01 \x01(\tR\asubject\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescriptionB5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"\vdescription\x18\x02 \x01(\tR\vdescriptionB6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var (
 	file_echo_errors_proto_rawDescOnce sync.Once

@@ -91,7 +91,7 @@ const file_echo_stream_proto_rawDesc = "" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x12\x14\n" +
 	"\x05count\x18\x02 \x01(\x05R\x05count\x12\x1f\n" +
 	"\vinterval_ms\x18\x03 \x01(\x05R\n" +
-	"intervalMsB5Z3github.com/jsr-probitas/dockerfiles/echo-grpc/protob\x06proto3"
+	"intervalMsB6Z4github.com/jsr-probitas/echo-servers/echo-grpc/protob\x06proto3"
 
 var (
 	file_echo_stream_proto_rawDescOnce sync.Once

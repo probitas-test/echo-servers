@@ -9,7 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph"
 )
 
 func setupTestClient(t *testing.T) *client.Client {

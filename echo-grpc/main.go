@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 
-	pb "github.com/jsr-probitas/dockerfiles/echo-grpc/proto"
-	"github.com/jsr-probitas/dockerfiles/echo-grpc/server"
+	pb "github.com/jsr-probitas/echo-servers/echo-grpc/proto"
+	"github.com/jsr-probitas/echo-servers/echo-grpc/server"
 )
 
 func main() {

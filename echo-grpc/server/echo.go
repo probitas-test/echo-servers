@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	pb "github.com/jsr-probitas/dockerfiles/echo-grpc/proto"
+	pb "github.com/jsr-probitas/echo-servers/echo-grpc/proto"
 )
 
 const (

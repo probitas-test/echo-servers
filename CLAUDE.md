@@ -1,6 +1,6 @@
-# Probitas Test Servers
+# Echo Servers
 
-Docker images for testing HTTP, gRPC, and GraphQL clients.
+Echo servers for testing HTTP, gRPC, and GraphQL clients.
 
 ## Project Overview
 
@@ -12,7 +12,7 @@ Docker images for testing HTTP, gRPC, and GraphQL clients.
 ## Project Structure
 
 ```
-dockerfiles/
+echo-servers/
 ├── flake.nix                 # Nix development environment
 ├── justfile                  # Root justfile (imports submodules)
 ├── compose.yaml              # Local orchestration
@@ -156,7 +156,7 @@ RUN go generate ./...  # If needed
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o app .
 
 FROM scratch
-LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/dockerfiles"
+LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/echo-servers"
 LABEL org.opencontainers.image.description="Description of the server"
 LABEL org.opencontainers.image.licenses="MIT"
 COPY --from=builder /app/app /app

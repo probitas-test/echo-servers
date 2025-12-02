@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph/model"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 

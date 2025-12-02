@@ -1,7 +1,7 @@
 # echo-http
 
-[![Build](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/build.echo-http.yml)
-[![Docker](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/dockerfiles/actions/workflows/docker.echo-http.yml)
+[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml)
+[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml)
 
 HTTP echo server for testing HTTP clients.
 

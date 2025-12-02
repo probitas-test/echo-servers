@@ -12,8 +12,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gorilla/websocket"
 
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph"
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph/model"
 )
 
 // requestContextMiddleware injects the http.Request into context for header access

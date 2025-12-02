@@ -20,7 +20,7 @@ resolver:
   omit_template_comment: true
 
 autobind:
-  - github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model
+  - github.com/jsr-probitas/echo-servers/echo-graphql/graph/model
 
 models:
   ID:
@@ -30,14 +30,14 @@ models:
     model:
       - github.com/99designs/gqlgen/graphql.Int
   Message:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.Message
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.Message
   EchoResult:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.EchoResult
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.EchoResult
   Headers:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.Headers
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.Headers
   HeaderEntry:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.HeaderEntry
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.HeaderEntry
   NestedEcho:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.NestedEcho
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.NestedEcho
   EchoListItem:
-    model: github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model.EchoListItem
+    model: github.com/jsr-probitas/echo-servers/echo-graphql/graph/model.EchoListItem

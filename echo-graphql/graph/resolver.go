@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jsr-probitas/dockerfiles/echo-graphql/graph/model"
+	"github.com/jsr-probitas/echo-servers/echo-graphql/graph/model"
 )
 
 // filteredSubscriber represents a subscriber with optional text filter

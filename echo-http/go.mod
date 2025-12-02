@@ -1,4 +1,4 @@
-module github.com/jsr-probitas/dockerfiles/echo-http
+module github.com/jsr-probitas/echo-servers/echo-http
 
 go 1.23
 
