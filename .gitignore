@@ -9,6 +9,7 @@ result
 echo-http/echo-http
 echo-grpc/echo-grpc
 echo-graphql/echo-graphql
+echo-connectrpc/echo-connectrpc
 
 # Environment
 .env

@@ -1,0 +1,44 @@
+name: Build echo-connectrpc
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "echo-connectrpc/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-connectrpc.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "echo-connectrpc/**"
+      - "flake.*"
+      - ".github/workflows/build.echo-connectrpc.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-connectrpc::lint
+      - run: nix develop -c just echo-connectrpc::fmt
+      - run: git diff --exit-code
+
+  test:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-connectrpc::test
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix develop -c just echo-connectrpc::build

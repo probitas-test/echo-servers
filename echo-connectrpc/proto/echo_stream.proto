@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto";
+
+message ServerStreamRequest {
+  string message = 1;
+  int32 count = 2;       // Number of responses to stream
+  int32 interval_ms = 3; // Interval between responses
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package echo.v1;
+
+option go_package = "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto";
+
+import "echo_deadline.proto";
+import "echo_metadata.proto";
+import "echo_payload.proto";
+import "echo_response.proto";
+import "echo_stream.proto";
+import "echo_unary.proto";
+
+// Echo service with various RPC patterns
+service Echo {
+  // Unary RPCs
+  rpc Echo (EchoRequest) returns (EchoResponse);
+  rpc EchoWithDelay (EchoWithDelayRequest) returns (EchoResponse);
+  rpc EchoError (EchoErrorRequest) returns (EchoResponse);
+
+  // Metadata/Headers RPCs
+  rpc EchoRequestMetadata (EchoRequestMetadataRequest) returns (EchoRequestMetadataResponse);
+  rpc EchoWithTrailers (EchoWithTrailersRequest) returns (EchoResponse);
+
+  // Payload Testing RPCs
+  rpc EchoLargePayload (EchoLargePayloadRequest) returns (EchoLargePayloadResponse);
+
+  // Deadline/Timeout RPCs
+  rpc EchoDeadline (EchoDeadlineRequest) returns (EchoDeadlineResponse);
+
+  // Error Scenarios RPCs
+  rpc EchoErrorWithDetails (EchoErrorWithDetailsRequest) returns (EchoResponse);
+
+  // Streaming RPCs
+  rpc ServerStream (ServerStreamRequest) returns (stream EchoResponse);
+  rpc ClientStream (stream EchoRequest) returns (EchoResponse);
+  rpc BidirectionalStream (stream EchoRequest) returns (stream EchoResponse);
+}

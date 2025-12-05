@@ -3,18 +3,20 @@
 [![Build echo-http](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml)
 [![Build echo-grpc](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml)
 [![Build echo-graphql](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml)
+[![Build echo-connectrpc](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-connectrpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-connectrpc.yml)
 
-Echo servers for testing HTTP, gRPC, and GraphQL clients. Built for testing
-[Probitas](https://github.com/jsr-probitas/probitas) and other client
+Echo servers for testing HTTP, gRPC, GraphQL, and Connect RPC clients. Built for
+testing [Probitas](https://github.com/jsr-probitas/probitas) and other client
 implementations.
 
 ## Images
 
-| Image                               | Protocol | Default Port | Status                                                                                                                                                                                                |
-| ----------------------------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ghcr.io/jsr-probitas/echo-http`    | HTTP     | 80           | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml)       |
-| `ghcr.io/jsr-probitas/echo-grpc`    | gRPC     | 50051        | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml)       |
-| `ghcr.io/jsr-probitas/echo-graphql` | GraphQL  | 8080         | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml) |
+| Image                                  | Protocol                      | Default Port | Status                                                                                                                                                                                                      |
+| -------------------------------------- | ----------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ghcr.io/jsr-probitas/echo-http`       | HTTP                          | 80           | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml)             |
+| `ghcr.io/jsr-probitas/echo-grpc`       | gRPC                          | 50051        | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml)             |
+| `ghcr.io/jsr-probitas/echo-graphql`    | GraphQL                       | 8080         | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml)       |
+| `ghcr.io/jsr-probitas/echo-connectrpc` | Connect RPC / gRPC / gRPC-Web | 8080         | [![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-connectrpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-connectrpc.yml) |
 
 ## Quick Start
 
@@ -32,6 +34,14 @@ grpcurl -plaintext -d '{"message":"hello"}' localhost:50051 echo.v1.Echo/Echo
 curl -X POST http://localhost:14000/graphql \
   -H "Content-Type: application/json" \
   -d '{"query":"{ echo(message: \"hello\") }"}'
+
+# Test Connect RPC (JSON)
+curl -X POST http://localhost:18081/echo.v1.Echo/Echo \
+  -H "Content-Type: application/json" \
+  -d '{"message":"hello"}'
+
+# Test Connect RPC (gRPC protocol)
+grpcurl -plaintext -d '{"message":"hello"}' localhost:18081 echo.v1.Echo/Echo
 
 # Stop all servers
 docker compose down
@@ -60,9 +70,10 @@ All servers are designed for testing purposes:
 
 ## Documentation
 
-- [echo-http](./echo-http/README.md)
-- [echo-grpc](./echo-grpc/README.md)
-- [echo-graphql](./echo-graphql/README.md)
+- [echo-http](./echo-http/README.md) - HTTP echo server
+- [echo-grpc](./echo-grpc/README.md) - gRPC echo server
+- [echo-graphql](./echo-graphql/README.md) - GraphQL echo server
+- [echo-connectrpc](./echo-connectrpc/README.md) - Connect RPC echo server (supports Connect RPC, gRPC, and gRPC-Web)
 
 ## Development
 

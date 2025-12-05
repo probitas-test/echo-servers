@@ -16,3 +16,9 @@ services:
     build: ./echo-graphql
     ports:
       - "14000:8080"
+
+  echo-connectrpc:
+    image: ghcr.io/jsr-probitas/echo-connectrpc:latest
+    build: ./echo-connectrpc
+    ports:
+      - "18081:8080"

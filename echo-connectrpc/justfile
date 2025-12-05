@@ -1,0 +1,38 @@
+[private]
+default:
+    @just --list
+
+# Run linter
+lint:
+    golangci-lint run ./...
+
+# Run tests
+test:
+    go test -v ./...
+
+# Build binary (runs go generate first)
+build: generate
+    go build -o echo-connectrpc .
+
+[private]
+generate:
+    protoc -I proto --go_out=proto --go_opt=paths=source_relative \
+        --connect-go_out=proto --connect-go_opt=paths=source_relative \
+        proto/*.proto
+
+# Run server locally
+run:
+    go run .
+
+# Format code
+fmt:
+    go fmt ./...
+    goimports -w .
+
+# Clean build artifacts
+clean:
+    rm -f echo-connectrpc
+
+# Tidy dependencies
+tidy:
+    go mod tidy
