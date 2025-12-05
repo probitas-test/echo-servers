@@ -1,6 +1,6 @@
 # Echo Servers
 
-Echo servers for testing HTTP, gRPC, and GraphQL clients.
+Echo servers for testing HTTP, gRPC, GraphQL, and Connect RPC clients.
 
 ## Project Overview
 
@@ -32,17 +32,26 @@ echo-servers/
 │   ├── proto/                # Protobuf definitions
 │   ├── server/               # gRPC server implementation
 │   └── docs/api.md
-└── echo-graphql/             # GraphQL echo server
+├── echo-graphql/             # GraphQL echo server
+│   ├── Dockerfile
+│   ├── justfile
+│   ├── .golangci.yml
+│   ├── gqlgen.yml            # GraphQL code generator config
+│   ├── main.go
+│   ├── graph/                # GraphQL schema and resolvers
+│   │   ├── schema.graphqls
+│   │   ├── resolver.go       # Contains //go:generate directive
+│   │   ├── generated.go      # Generated (excluded from lint)
+│   │   └── schema.resolvers.go
+│   └── docs/api.md
+└── echo-connectrpc/          # Connect RPC echo server
     ├── Dockerfile
     ├── justfile
     ├── .golangci.yml
-    ├── gqlgen.yml            # GraphQL code generator config
     ├── main.go
-    ├── graph/                # GraphQL schema and resolvers
-    │   ├── schema.graphqls
-    │   ├── resolver.go       # Contains //go:generate directive
-    │   ├── generated.go      # Generated (excluded from lint)
-    │   └── schema.resolvers.go
+    ├── config.go             # Environment variable configuration
+    ├── proto/                # Protobuf definitions (shared with echo-grpc)
+    ├── server/               # Connect RPC server implementation
     └── docs/api.md
 ```
 
@@ -81,6 +90,7 @@ just fmt           # Go + dprint (markdown/json/yaml)
 # Code generation (run automatically by build)
 # - echo-grpc: protoc (proto/*.pb.go)
 # - echo-graphql: gqlgen (graph/generated.go, graph/models_gen.go)
+# - echo-connectrpc: protoc with protoc-gen-connect-go (proto/*.connect.go)
 ```
 
 ### Local Testing
@@ -95,6 +105,9 @@ grpcurl -plaintext localhost:50051 list
 curl -X POST http://localhost:14000/graphql \
   -H "Content-Type: application/json" \
   -d '{"query": "{ echo(message: \"hello\") }"}'
+curl -X POST http://localhost:18081/echo.v1.Echo/Echo \
+  -H "Content-Type: application/json" \
+  -d '{"message": "hello"}'
 
 # Stop
 docker compose down

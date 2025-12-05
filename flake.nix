@@ -25,6 +25,7 @@
             protobuf
             protoc-gen-go
             protoc-gen-go-grpc
+            protoc-gen-connect-go
 
             # gRPC client for testing
             grpcurl
