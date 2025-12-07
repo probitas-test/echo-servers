@@ -4,37 +4,44 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    probitas.url = "github:jsr-probitas/probitas";
+    probitas.inputs.nixpkgs.follows = "nixpkgs";
+    probitas.inputs.flake-utils.follows = "flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, probitas }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        probitasPackage = probitas.packages.${system}.probitas;
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
+          packages = [
             # Go
-            go
+            pkgs.go
 
             # Linting and formatting
-            golangci-lint
-            gotools # goimports
+            pkgs.golangci-lint
+            pkgs.gotools # goimports
 
             # Protocol Buffers
-            protobuf
-            protoc-gen-go
-            protoc-gen-go-grpc
-            protoc-gen-connect-go
+            pkgs.protobuf
+            pkgs.protoc-gen-go
+            pkgs.protoc-gen-go-grpc
+            pkgs.protoc-gen-connect-go
 
             # gRPC client for testing
-            grpcurl
+            pkgs.grpcurl
 
             # Task runner
-            just
+            pkgs.just
 
             # Formatter
-            dprint
+            pkgs.dprint
+
+            # Probitas scenario runner
+            probitasPackage
           ];
 
           shellHook = ''

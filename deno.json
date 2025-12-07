@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "probitas": "jsr:@probitas/probitas@^0"
+  },
+  "tasks": {
+    "probitas": "probitas run"
+  },
+  "probitas": {
+    "includes": ["probitas/**/*.probitas.ts"],
+    "reporter": "list"
+  }
+}

@@ -34,10 +34,34 @@
         "type": "github"
       }
     },
+    "probitas": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1765128148,
+        "narHash": "sha256-tw/ylS9HBNqrUxwPsy+m1UNfEFcZoqWPiK6DExPvNns=",
+        "owner": "jsr-probitas",
+        "repo": "probitas",
+        "rev": "65da2d072a4122a9e03e93827dc09dfe79985164",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jsr-probitas",
+        "repo": "probitas",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "probitas": "probitas"
       }
     },
     "systems": {
