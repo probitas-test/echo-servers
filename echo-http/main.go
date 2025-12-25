@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"log"
 	"net/http"
 
@@ -10,8 +11,14 @@ import (
 	"github.com/probitas-test/echo-servers/echo-http/handlers"
 )
 
+//go:embed docs/api.md
+var apiDocs string
+
 func main() {
 	cfg := LoadConfig()
+
+	// Set API docs content for handler
+	handlers.SetAPIDocs(apiDocs)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -72,6 +79,9 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
+
+	// API documentation endpoint
+	r.Get("/", handlers.APIDocsHandler)
 
 	log.Printf("Starting server on %s", cfg.Addr())
 	if err := http.ListenAndServe(cfg.Addr(), r); err != nil {
