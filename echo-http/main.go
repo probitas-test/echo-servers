@@ -30,6 +30,7 @@ func main() {
 
 	// Utility endpoints
 	r.Get("/headers", handlers.HeadersHandler)
+	r.Get("/response-header", handlers.ResponseHeaderHandler)
 	r.Get("/ip", handlers.IPHandler)
 	r.Get("/user-agent", handlers.UserAgentHandler)
 
