@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"log"
 	"net/http"
 	"time"
@@ -15,6 +16,9 @@ import (
 	"github.com/probitas-test/echo-servers/echo-graphql/graph"
 	"github.com/probitas-test/echo-servers/echo-graphql/graph/model"
 )
+
+//go:embed docs/api.md
+var apiDocs string
 
 // requestContextMiddleware injects the http.Request into context for header access
 func requestContextMiddleware(next http.Handler) http.Handler {
@@ -58,8 +62,14 @@ func main() {
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
 
+	// API documentation endpoint
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
+		_, _ = w.Write([]byte(apiDocs))
+	})
+
 	// GraphQL playground
-	http.Handle("/", playground.Handler("GraphQL Playground", "/graphql"))
+	http.Handle("/playground", playground.Handler("GraphQL Playground", "/graphql"))
 
 	// GraphQL endpoint (with request context middleware for header access)
 	http.Handle("/graphql", requestContextMiddleware(srv))

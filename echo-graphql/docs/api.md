@@ -12,11 +12,12 @@
 
 ## Endpoints
 
-| Path       | Description        |
-| ---------- | ------------------ |
-| `/`        | GraphQL Playground |
-| `/graphql` | GraphQL endpoint   |
-| `/health`  | Health check       |
+| Path          | Description        |
+| ------------- | ------------------ |
+| `/`           | API documentation  |
+| `/graphql`    | GraphQL endpoint   |
+| `/playground` | GraphQL Playground |
+| `/health`     | Health check       |
 
 ## Schema
 
