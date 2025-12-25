@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS builder
 ARG TARGETOS TARGETARCH
 
 WORKDIR /app
@@ -22,7 +22,7 @@ RUN go run github.com/99designs/gqlgen generate
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o echo-graphql .
 
 FROM scratch
-LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/echo-servers"
+LABEL org.opencontainers.image.source="https://github.com/probitas-test/echo-servers"
 LABEL org.opencontainers.image.description="GraphQL echo server for testing GraphQL clients"
 LABEL org.opencontainers.image.licenses="MIT"
 COPY --from=builder /app/echo-graphql /echo-graphql

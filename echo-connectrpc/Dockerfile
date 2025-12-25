@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS builder
 ARG TARGETOS TARGETARCH
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN protoc -I proto --go_out=proto --go_opt=paths=source_relative \
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o echo-connectrpc .
 
 FROM scratch
-LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/echo-servers"
+LABEL org.opencontainers.image.source="https://github.com/probitas-test/echo-servers"
 LABEL org.opencontainers.image.description="Connect RPC echo server for testing Connect RPC clients"
 LABEL org.opencontainers.image.licenses="MIT"
 COPY --from=builder /app/echo-connectrpc /echo-connectrpc

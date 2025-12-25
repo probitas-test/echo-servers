@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package echo.v1;
 
-option go_package = "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto";
+option go_package = "github.com/probitas-test/echo-servers/echo-connectrpc/proto";
 
 message EchoLargePayloadRequest {
   int32 size_bytes = 1;  // Size of payload to return (max 10MB)

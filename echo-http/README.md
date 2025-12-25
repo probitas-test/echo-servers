@@ -1,20 +1,20 @@
 # echo-http
 
-[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-http.yml)
-[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-http.yml)
+[![Build](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-http.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-http.yml)
+[![Docker](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-http.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-http.yml)
 
 HTTP echo server for testing HTTP clients.
 
 ## Image
 
 ```
-ghcr.io/jsr-probitas/echo-http:latest
+ghcr.io/probitas-test/echo-http:latest
 ```
 
 ## Quick Start
 
 ```bash
-docker run -p 8080:80 ghcr.io/jsr-probitas/echo-http:latest
+docker run -p 8080:80 ghcr.io/probitas-test/echo-http:latest
 ```
 
 ## Environment Variables
@@ -26,10 +26,10 @@ docker run -p 8080:80 ghcr.io/jsr-probitas/echo-http:latest
 
 ```bash
 # Custom port
-docker run -p 3000:3000 -e PORT=3000 ghcr.io/jsr-probitas/echo-http:latest
+docker run -p 3000:3000 -e PORT=3000 ghcr.io/probitas-test/echo-http:latest
 
 # Using .env file
-docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/jsr-probitas/echo-http:latest
+docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-http:latest
 ```
 
 ## API

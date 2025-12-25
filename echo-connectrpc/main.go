@@ -16,8 +16,8 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/jsr-probitas/echo-servers/echo-connectrpc/proto/protoconnect"
-	"github.com/jsr-probitas/echo-servers/echo-connectrpc/server"
+	"github.com/probitas-test/echo-servers/echo-connectrpc/proto/protoconnect"
+	"github.com/probitas-test/echo-servers/echo-connectrpc/server"
 )
 
 func main() {
