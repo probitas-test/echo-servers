@@ -1,20 +1,20 @@
 # echo-graphql
 
-[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-graphql.yml)
-[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-graphql.yml)
+[![Build](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-graphql.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-graphql.yml)
+[![Docker](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-graphql.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-graphql.yml)
 
 GraphQL echo server for testing GraphQL clients.
 
 ## Image
 
 ```
-ghcr.io/jsr-probitas/echo-graphql:latest
+ghcr.io/probitas-test/echo-graphql:latest
 ```
 
 ## Quick Start
 
 ```bash
-docker run -p 8080:8080 ghcr.io/jsr-probitas/echo-graphql:latest
+docker run -p 8080:8080 ghcr.io/probitas-test/echo-graphql:latest
 ```
 
 Access GraphQL Playground at http://localhost:8080/
@@ -28,10 +28,10 @@ Access GraphQL Playground at http://localhost:8080/
 
 ```bash
 # Custom port
-docker run -p 3000:3000 -e PORT=3000 ghcr.io/jsr-probitas/echo-graphql:latest
+docker run -p 3000:3000 -e PORT=3000 ghcr.io/probitas-test/echo-graphql:latest
 
 # Using .env file
-docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/jsr-probitas/echo-graphql:latest
+docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-graphql:latest
 ```
 
 ## API

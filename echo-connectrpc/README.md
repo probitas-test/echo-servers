@@ -18,7 +18,7 @@ Connect RPC echo server for testing Connect RPC, gRPC, and gRPC-Web clients.
 ### Using Docker
 
 ```bash
-docker run -p 8080:8080 ghcr.io/jsr-probitas/echo-connectrpc:latest
+docker run -p 8080:8080 ghcr.io/probitas-test/echo-connectrpc:latest
 ```
 
 ### Using Docker Compose

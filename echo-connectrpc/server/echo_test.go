@@ -10,8 +10,8 @@ import (
 	"connectrpc.com/connect"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 
-	pb "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto"
-	"github.com/jsr-probitas/echo-servers/echo-connectrpc/proto/protoconnect"
+	pb "github.com/probitas-test/echo-servers/echo-connectrpc/proto"
+	"github.com/probitas-test/echo-servers/echo-connectrpc/proto/protoconnect"
 )
 
 func setupTestServer(t *testing.T) (protoconnect.EchoClient, *httptest.Server) {

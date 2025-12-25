@@ -138,7 +138,7 @@ const file_echo_payload_proto_rawDesc = "" +
 	"\x18EchoLargePayloadResponse\x12\x18\n" +
 	"\apayload\x18\x01 \x01(\fR\apayload\x12\x1f\n" +
 	"\vactual_size\x18\x02 \x01(\x05R\n" +
-	"actualSizeB<Z:github.com/jsr-probitas/echo-servers/echo-connectrpc/protob\x06proto3"
+	"actualSizeB<Z:github.com/probitas-test/echo-servers/echo-connectrpc/protob\x06proto3"
 
 var (
 	file_echo_payload_proto_rawDescOnce sync.Once

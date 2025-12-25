@@ -12,8 +12,8 @@ import (
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	pb "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto"
-	"github.com/jsr-probitas/echo-servers/echo-connectrpc/proto/protoconnect"
+	pb "github.com/probitas-test/echo-servers/echo-connectrpc/proto"
+	"github.com/probitas-test/echo-servers/echo-connectrpc/proto/protoconnect"
 )
 
 const (

@@ -5,7 +5,7 @@ Echo servers for testing HTTP, gRPC, GraphQL, and Connect RPC clients.
 ## Project Overview
 
 - **Language**: Go 1.24
-- **Container Registry**: GHCR (`ghcr.io/jsr-probitas/*`)
+- **Container Registry**: GHCR (`ghcr.io/probitas-test/*`)
 - **Build System**: just (modular justfile)
 - **Development Environment**: Nix Flakes
 
@@ -142,7 +142,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/jsr-probitas
+        - github.com/probitas-test
 ```
 
 ### Code Generation
@@ -169,7 +169,7 @@ RUN go generate ./...  # If needed
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o app .
 
 FROM scratch
-LABEL org.opencontainers.image.source="https://github.com/jsr-probitas/echo-servers"
+LABEL org.opencontainers.image.source="https://github.com/probitas-test/echo-servers"
 LABEL org.opencontainers.image.description="Description of the server"
 LABEL org.opencontainers.image.licenses="MIT"
 COPY --from=builder /app/app /app

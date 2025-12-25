@@ -11,7 +11,7 @@ import (
 	strings "strings"
 
 	connect "connectrpc.com/connect"
-	proto "github.com/jsr-probitas/echo-servers/echo-connectrpc/proto"
+	proto "github.com/probitas-test/echo-servers/echo-connectrpc/proto"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are

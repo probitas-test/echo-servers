@@ -1,4 +1,4 @@
-module github.com/jsr-probitas/echo-servers/echo-http
+module github.com/probitas-test/echo-servers/echo-http
 
 go 1.23
 

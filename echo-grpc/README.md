@@ -1,20 +1,20 @@
 # echo-grpc
 
-[![Build](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/build.echo-grpc.yml)
-[![Docker](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/jsr-probitas/echo-servers/actions/workflows/docker.echo-grpc.yml)
+[![Build](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-grpc.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/build.echo-grpc.yml)
+[![Docker](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-grpc.yml/badge.svg)](https://github.com/probitas-test/echo-servers/actions/workflows/docker.echo-grpc.yml)
 
 gRPC echo server for testing gRPC clients.
 
 ## Image
 
 ```
-ghcr.io/jsr-probitas/echo-grpc:latest
+ghcr.io/probitas-test/echo-grpc:latest
 ```
 
 ## Quick Start
 
 ```bash
-docker run -p 50051:50051 ghcr.io/jsr-probitas/echo-grpc:latest
+docker run -p 50051:50051 ghcr.io/probitas-test/echo-grpc:latest
 ```
 
 ## Environment Variables
@@ -27,16 +27,16 @@ docker run -p 50051:50051 ghcr.io/jsr-probitas/echo-grpc:latest
 
 ```bash
 # Custom port
-docker run -p 9000:9000 -e PORT=9000 ghcr.io/jsr-probitas/echo-grpc:latest
+docker run -p 9000:9000 -e PORT=9000 ghcr.io/probitas-test/echo-grpc:latest
 
 # Using .env file
-docker run -p 50051:50051 -v $(pwd)/.env:/app/.env ghcr.io/jsr-probitas/echo-grpc:latest
+docker run -p 50051:50051 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-grpc:latest
 
 # Disable v1alpha reflection (v1 only)
-docker run -p 50051:50051 -e DISABLE_REFLECTION_V1ALPHA=true ghcr.io/jsr-probitas/echo-grpc:latest
+docker run -p 50051:50051 -e DISABLE_REFLECTION_V1ALPHA=true ghcr.io/probitas-test/echo-grpc:latest
 
 # Disable v1 reflection (v1alpha only)
-docker run -p 50051:50051 -e DISABLE_REFLECTION_V1=true ghcr.io/jsr-probitas/echo-grpc:latest
+docker run -p 50051:50051 -e DISABLE_REFLECTION_V1=true ghcr.io/probitas-test/echo-grpc:latest
 ```
 
 ## API

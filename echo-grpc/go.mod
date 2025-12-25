@@ -1,4 +1,4 @@
-module github.com/jsr-probitas/echo-servers/echo-grpc
+module github.com/probitas-test/echo-servers/echo-grpc
 
 go 1.24.0
 
