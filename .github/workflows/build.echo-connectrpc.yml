@@ -18,9 +18,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/checkout@v6
+      - uses: nixbuild/nix-quick-install-action@v34
       - run: nix develop -c just echo-connectrpc::lint
       - run: nix develop -c just echo-connectrpc::fmt
       - run: git diff --exit-code
@@ -29,16 +28,14 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/checkout@v6
+      - uses: nixbuild/nix-quick-install-action@v34
       - run: nix develop -c just echo-connectrpc::test
 
   build:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/checkout@v6
+      - uses: nixbuild/nix-quick-install-action@v34
       - run: nix develop -c just echo-connectrpc::build
