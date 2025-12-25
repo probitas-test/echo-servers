@@ -1,6 +1,6 @@
 module github.com/probitas-test/echo-servers/echo-graphql
 
-go 1.24.0
+go 1.25
 
 require (
 	github.com/99designs/gqlgen v0.17.84

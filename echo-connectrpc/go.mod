@@ -1,6 +1,6 @@
 module github.com/probitas-test/echo-servers/echo-connectrpc
 
-go 1.24.0
+go 1.25
 
 require (
 	connectrpc.com/connect v1.18.1
