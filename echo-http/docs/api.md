@@ -148,6 +148,46 @@ curl http://localhost:80/headers \
 }
 ```
 
+### GET /response-header
+
+Set response headers based on query parameters. Each query parameter key-value
+pair is set as a response header. Useful for testing HTTP client header processing.
+
+**Request:**
+
+```bash
+curl -i "http://localhost:80/response-header?X-Custom-Header=custom-value&Cache-Control=no-cache"
+```
+
+**Response:**
+
+```
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Content-Type: application/json
+X-Custom-Header: custom-value
+
+{
+  "headers": {
+    "X-Custom-Header": "custom-value",
+    "Cache-Control": "no-cache"
+  }
+}
+```
+
+**Examples:**
+
+```bash
+# Set custom response headers
+curl -i "http://localhost:80/response-header?X-Request-Id=12345&X-Correlation-Id=abc-xyz"
+
+# Test cache control headers
+curl -i "http://localhost:80/response-header?Cache-Control=max-age=3600&Expires=Wed,%2021%20Oct%202025%2007:28:00%20GMT"
+
+# Set content language
+curl -i "http://localhost:80/response-header?Content-Language=en-US"
+```
+
 ### GET /status/{code}
 
 Return the specified HTTP status code.
