@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"errors"
 	"log"
 	"net/http"
@@ -20,6 +21,9 @@ import (
 	"github.com/probitas-test/echo-servers/echo-connectrpc/server"
 )
 
+//go:embed docs/api.md
+var apiDocs string
+
 func main() {
 	cfg := LoadConfig()
 
@@ -29,6 +33,12 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+
+	// API documentation endpoint
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/markdown; charset=utf-8")
+		_, _ = w.Write([]byte(apiDocs))
+	})
 
 	// Prepare handler options for protocol control
 	var handlerOpts []connect.HandlerOption
