@@ -51,6 +51,7 @@ docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-http
 | Endpoint           | Method | Description                            |
 | ------------------ | ------ | -------------------------------------- |
 | `/headers`         | GET    | Echo headers only                      |
+| `/response-header` | GET    | Set response headers from query params |
 | `/ip`              | GET    | Return client IP address               |
 | `/user-agent`      | GET    | Return User-Agent header               |
 | `/status/{code}`   | ANY    | Return specified status code (100-599) |
