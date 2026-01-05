@@ -484,6 +484,207 @@ curl -H "Authorization: Bearer my-token-123" http://localhost:80/bearer
 
 **Response (failure):** 401 Unauthorized with `WWW-Authenticate: Bearer` header.
 
+### GET /oidc/{user}/{pass}/.well-known/openid-configuration
+
+OpenID Connect Discovery endpoint providing provider metadata. Returns
+configuration information that OIDC clients use to auto-configure endpoints and
+supported features. The `{user}` and `{pass}` in the URL path define the credentials
+required for authentication.
+
+**Path Parameters:**
+
+- `user`: Username for authentication
+- `pass`: Password for authentication
+
+**Request:**
+
+```bash
+curl http://localhost:80/oidc/testuser/testpass/.well-known/openid-configuration
+```
+
+**Response:**
+
+```json
+{
+  "issuer": "http://localhost:80/oidc/testuser/testpass",
+  "authorization_endpoint": "http://localhost:80/oidc/testuser/testpass/authorize",
+  "token_endpoint": "http://localhost:80/oidc/testuser/testpass/token",
+  "response_types_supported": ["code"],
+  "subject_types_supported": ["public"],
+  "id_token_signing_alg_values_supported": ["none"],
+  "scopes_supported": ["openid", "profile", "email"],
+  "grant_types_supported": ["authorization_code"],
+  "code_challenge_methods_supported": ["plain", "S256"]
+}
+```
+
+**Notes:**
+
+- The `issuer` and endpoint URLs include the `{user}/{pass}` path and are dynamically
+  generated based on the request
+- Supports `X-Forwarded-Proto` header for proxy environments (http/https detection)
+- This is a mock implementation - `id_token_signing_alg_values_supported` is set to
+  `["none"]` as no actual JWT signing is performed
+
+### GET/POST /oidc/{user}/{pass}/authorize
+
+OIDC authorization endpoint supporting both GET and POST methods per OpenID Connect
+Core 1.0 specification.
+
+**GET:** Display login form for Authorization Code Flow
+**POST:** Process authentication and generate authorization code
+
+**Path Parameters:**
+
+- `user`: Expected username
+- `pass`: Expected password
+
+**GET Query Parameters:**
+
+- `redirect_uri` (required): URI to redirect after authentication
+- `response_type` (required): Must be `code`
+- `scope` (optional): Space-separated scopes (default: `openid profile email`)
+
+**POST Form Parameters:**
+
+- `username` (required): Must match `{user}` in URL
+- `password` (required): Must match `{pass}` in URL
+- `state` (required): CSRF protection token from session
+- `redirect_uri` (required): Must match the original request
+
+**GET Request:**
+
+```bash
+curl "http://localhost:80/oidc/testuser/testpass/authorize?redirect_uri=http://localhost/callback&response_type=code&scope=openid%20profile"
+```
+
+**GET Response:** HTML login form
+
+**POST Request:**
+
+```bash
+curl -X POST http://localhost:80/oidc/testuser/testpass/authorize \
+  -d "username=testuser" \
+  -d "password=testpass" \
+  -d "state=<state-from-session>" \
+  -d "redirect_uri=http://localhost/callback"
+```
+
+**POST Response:** 302 redirect to `redirect_uri` with `code` and `state` parameters
+
+### GET /oidc/{user}/{pass}/callback
+
+Display the authorization code and state received from the authorization server.
+Provides a UI to exchange the code for tokens.
+
+**Path Parameters:**
+
+- `user`: Username (for URL consistency, not validated at callback)
+- `pass`: Password (for URL consistency, not validated at callback)
+
+**Query Parameters:**
+
+- `code`: Authorization code
+- `state`: State parameter for validation
+
+**Request:**
+
+```bash
+curl "http://localhost:80/oidc/testuser/testpass/callback?code=abc123&state=xyz789"
+```
+
+**Response:** HTML page displaying the code and offering token exchange.
+
+### POST /oidc/{user}/{pass}/token
+
+Exchange an authorization code for access and ID tokens.
+
+**Path Parameters:**
+
+- `user`: Username (for URL consistency, not validated at token exchange)
+- `pass`: Password (for URL consistency, not validated at token exchange)
+
+**Form Parameters:**
+
+- `grant_type` (required): Must be `authorization_code`
+- `code` (required): Authorization code from `/oidc/{user}/{pass}/authorize`
+- `redirect_uri` (required): Must match the original request
+
+**Request:**
+
+```bash
+curl -X POST http://localhost:80/oidc/testuser/testpass/token \
+  -d "grant_type=authorization_code" \
+  -d "code=<authorization-code>" \
+  -d "redirect_uri=http://localhost/oidc/testuser/testpass/callback"
+```
+
+**Response:**
+
+```json
+{
+  "access_token": "mock-access-token-...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "mock-refresh-token-...",
+  "id_token": "{\"iss\":\"http://localhost/oidc/testuser/testpass\",\"sub\":\"testuser\",...}",
+  "scope": "openid profile email"
+}
+```
+
+**Complete OIDC Flow Example:**
+
+```bash
+# Step 1: Discover OIDC configuration
+curl http://localhost:80/oidc/testuser/testpass/.well-known/openid-configuration
+
+# Step 2: Open authorization endpoint in browser (displays login form)
+open "http://localhost:80/oidc/testuser/testpass/authorize?redirect_uri=http://localhost/oidc/testuser/testpass/callback&response_type=code"
+
+# Step 3: Submit login form (browser handles this)
+# Enter username=testuser and password=testpass (must match URL path)
+
+# Step 4: After redirect, exchange code for tokens
+curl -X POST http://localhost:80/oidc/testuser/testpass/token \
+  -d "grant_type=authorization_code" \
+  -d "code=<code-from-redirect>" \
+  -d "redirect_uri=http://localhost/oidc/testuser/testpass/callback"
+```
+
+### GET /oidc/{user}/{pass}/demo
+
+Interactive demonstration of the complete OIDC Authorization Code Flow. This endpoint
+provides a browser-based walkthrough of all OIDC steps with visual feedback.
+
+**Purpose:** Educational tool for understanding OIDC flow and quick manual testing.
+
+**Flow:**
+
+1. Visit `/oidc/{user}/{pass}/demo` → Automatically redirects to authorize endpoint
+2. Complete login form with credentials
+3. View authorization code and state parameter
+4. Click button to exchange code for tokens
+5. View all tokens (access_token, id_token, refresh_token)
+
+**Usage:**
+
+```bash
+# Open in browser for interactive demo
+open "http://localhost:80/oidc/testuser/testpass/demo"
+```
+
+**Features:**
+
+- ✅ Zero configuration required - just open in browser
+- ✅ Visual step-by-step flow explanation
+- ✅ One-click token exchange
+- ✅ Displays all tokens and their purposes
+- ✅ Educational notes about OIDC security concepts
+
+**Note:** This is a self-contained demo where the OIDC provider acts as its own
+client. For programmatic testing of actual OIDC client applications, use the
+individual endpoints (`/authorize`, `/token`) with your own redirect_uri.
+
 ---
 
 ## Cookie Endpoints
