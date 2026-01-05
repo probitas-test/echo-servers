@@ -69,11 +69,16 @@ docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-http
 
 ### Authentication Endpoints
 
-| Endpoint                           | Method | Description                              |
-| ---------------------------------- | ------ | ---------------------------------------- |
-| `/basic-auth/{user}/{pass}`        | GET    | Basic auth (200 if match, 401 otherwise) |
-| `/hidden-basic-auth/{user}/{pass}` | GET    | Basic auth (200 if match, 404 otherwise) |
-| `/bearer`                          | GET    | Bearer token validation                  |
+| Endpoint                                               | Method   | Description                              |
+| ------------------------------------------------------ | -------- | ---------------------------------------- |
+| `/basic-auth/{user}/{pass}`                            | GET      | Basic auth (200 if match, 401 otherwise) |
+| `/hidden-basic-auth/{user}/{pass}`                     | GET      | Basic auth (200 if match, 404 otherwise) |
+| `/bearer`                                              | GET      | Bearer token validation                  |
+| `/oidc/{user}/{pass}/.well-known/openid-configuration` | GET      | OIDC Discovery metadata (mock)           |
+| `/oidc/{user}/{pass}/authorize`                        | GET/POST | OIDC authorization endpoint (mock)       |
+| `/oidc/{user}/{pass}/callback`                         | GET      | OIDC callback handler                    |
+| `/oidc/{user}/{pass}/token`                            | POST     | OIDC token endpoint (mock)               |
+| `/oidc/{user}/{pass}/demo`                             | GET      | Interactive OIDC flow demo (browser)     |
 
 ### Cookie Endpoints
 
@@ -140,6 +145,12 @@ curl -u user:pass http://localhost:8080/basic-auth/user/pass
 
 # Bearer token
 curl -H "Authorization: Bearer my-token" http://localhost:8080/bearer
+
+# OIDC interactive demo (open in browser for complete flow demonstration)
+open "http://localhost:8080/oidc/testuser/testpass/demo"
+
+# OIDC manual flow (for programmatic testing)
+# curl "http://localhost:8080/oidc/testuser/testpass/authorize?redirect_uri=http://localhost:8080/oidc/testuser/testpass/callback&response_type=code"
 
 # Cookie handling
 curl -c cookies.txt http://localhost:8080/cookies/set?session=abc123

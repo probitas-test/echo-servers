@@ -58,6 +58,14 @@ func main() {
 	r.Get("/hidden-basic-auth/{user}/{pass}", handlers.HiddenBasicAuthHandler)
 	r.Get("/bearer", handlers.BearerHandler)
 
+	// OIDC endpoints
+	r.Get("/oidc/{user}/{pass}/.well-known/openid-configuration", handlers.OIDCDiscoveryHandler)
+	r.Get("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
+	r.Post("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
+	r.Get("/oidc/{user}/{pass}/callback", handlers.OIDCCallbackHandler)
+	r.Post("/oidc/{user}/{pass}/token", handlers.OIDCTokenHandler)
+	r.Get("/oidc/{user}/{pass}/demo", handlers.OIDCDemoHandler)
+
 	// Cookie endpoints
 	r.Get("/cookies", handlers.CookiesHandler)
 	r.Get("/cookies/set", handlers.CookiesSetHandler)
