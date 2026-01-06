@@ -69,11 +69,6 @@ func main() {
 	r.Get("/absolute-redirect/{n}", handlers.AbsoluteRedirectHandler)
 	r.Get("/relative-redirect/{n}", handlers.RelativeRedirectHandler)
 
-	// Authentication endpoints
-	r.Get("/basic-auth/{user}/{pass}", handlers.BasicAuthHandler)
-	r.Get("/hidden-basic-auth/{user}/{pass}", handlers.HiddenBasicAuthHandler)
-	r.Get("/bearer", handlers.BearerHandler)
-
 	// OIDC endpoints
 	r.Get("/oidc/{user}/{pass}/.well-known/openid-configuration", handlers.OIDCDiscoveryHandler)
 	r.Get("/oidc/{user}/{pass}/.well-known/jwks.json", handlers.OIDCJWKSHandler)
