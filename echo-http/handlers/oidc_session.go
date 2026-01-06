@@ -9,20 +9,26 @@ import (
 
 // Session represents an OIDC session
 type Session struct {
-	ID          string
-	State       string // Client-provided state (optional, may be empty)
-	RedirectURI string
-	Scope       string
-	CreatedAt   time.Time
+	ID                  string
+	State               string // Client-provided state (optional, may be empty)
+	RedirectURI         string
+	Scope               string
+	CodeChallenge       string // PKCE code_challenge parameter
+	CodeChallengeMethod string // PKCE method: "plain" or "S256"
+	Nonce               string // OIDC nonce parameter for replay attack protection
+	CreatedAt           time.Time
 }
 
 // AuthCode represents an authorization code issued after authentication
 type AuthCode struct {
-	Code        string
-	RedirectURI string
-	Username    string
-	Scope       string
-	CreatedAt   time.Time
+	Code                string
+	RedirectURI         string
+	Username            string
+	Scope               string
+	CodeChallenge       string // PKCE code_challenge parameter
+	CodeChallengeMethod string // PKCE method: "plain" or "S256"
+	Nonce               string // OIDC nonce parameter for replay attack protection
+	CreatedAt           time.Time
 }
 
 // SessionStore provides in-memory storage for OIDC sessions and authorization codes
@@ -50,19 +56,22 @@ func NewSessionStore(ttl time.Duration) *SessionStore {
 	return store
 }
 
-// CreateSession creates a new session with optional client-provided state
-func (s *SessionStore) CreateSession(state, redirectURI, scope string) (*Session, error) {
+// CreateSession creates a new session with optional client-provided state, PKCE parameters, and nonce
+func (s *SessionStore) CreateSession(state, redirectURI, scope, codeChallenge, codeChallengeMethod, nonce string) (*Session, error) {
 	sessionID, err := generateRandomString(32)
 	if err != nil {
 		return nil, err
 	}
 
 	session := &Session{
-		ID:          sessionID,
-		State:       state, // Client-provided (may be empty)
-		RedirectURI: redirectURI,
-		Scope:       scope,
-		CreatedAt:   time.Now(),
+		ID:                  sessionID,
+		State:               state, // Client-provided (may be empty)
+		RedirectURI:         redirectURI,
+		Scope:               scope,
+		CodeChallenge:       codeChallenge,
+		CodeChallengeMethod: codeChallengeMethod,
+		Nonce:               nonce,
+		CreatedAt:           time.Now(),
 	}
 
 	s.mu.Lock()
@@ -97,19 +106,22 @@ func (s *SessionStore) DeleteSession(sessionID string) {
 	s.mu.Unlock()
 }
 
-// CreateAuthCode creates a new authorization code
-func (s *SessionStore) CreateAuthCode(redirectURI, username, scope string) (*AuthCode, error) {
+// CreateAuthCode creates a new authorization code with PKCE parameters and nonce
+func (s *SessionStore) CreateAuthCode(redirectURI, username, scope, codeChallenge, codeChallengeMethod, nonce string) (*AuthCode, error) {
 	code, err := generateRandomString(32)
 	if err != nil {
 		return nil, err
 	}
 
 	authCode := &AuthCode{
-		Code:        code,
-		RedirectURI: redirectURI,
-		Username:    username,
-		Scope:       scope,
-		CreatedAt:   time.Now(),
+		Code:                code,
+		RedirectURI:         redirectURI,
+		Username:            username,
+		Scope:               scope,
+		CodeChallenge:       codeChallenge,
+		CodeChallengeMethod: codeChallengeMethod,
+		Nonce:               nonce,
+		CreatedAt:           time.Now(),
 	}
 
 	s.mu.Lock()
