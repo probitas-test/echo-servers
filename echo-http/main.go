@@ -33,7 +33,6 @@ func main() {
 		AuthCodeSessionTTL:          cfg.AuthCodeSessionTTL,
 		AuthCodeValidateRedirectURI: cfg.AuthCodeValidateRedirectURI,
 		AuthCodeAllowedRedirectURIs: cfg.AuthCodeAllowedRedirectURIs,
-		OIDCEnableJWTSigning:        cfg.OIDCEnableJWTSigning,
 	})
 
 	r := chi.NewRouter()

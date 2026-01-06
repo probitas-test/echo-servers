@@ -28,9 +28,6 @@ type Config struct {
 	AuthCodeSessionTTL          int
 	AuthCodeValidateRedirectURI bool
 	AuthCodeAllowedRedirectURIs string
-
-	// OIDC Configuration (id_token specific)
-	OIDCEnableJWTSigning bool
 }
 
 func LoadConfig() *Config {
@@ -46,7 +43,7 @@ func LoadConfig() *Config {
 		AuthAllowedClientSecret: getEnv("AUTH_ALLOWED_CLIENT_SECRET", ""),
 		AuthSupportedScopes:     parseScopes(getEnv("AUTH_SUPPORTED_SCOPES", "openid,profile,email")),
 		AuthTokenExpiry:         getIntEnv("AUTH_TOKEN_EXPIRY", 3600),
-		AuthAllowedGrantTypes:   parseGrantTypes(getEnv("AUTH_ALLOWED_GRANT_TYPES", "authorization_code,client_credentials")),
+		AuthAllowedGrantTypes:   parseGrantTypes(getEnv("AUTH_ALLOWED_GRANT_TYPES", "authorization_code,client_credentials,password,refresh_token")),
 
 		// Resource Owner Password Credentials / Basic Auth settings
 		AuthAllowedUsername: getEnv("AUTH_ALLOWED_USERNAME", "testuser"),
@@ -57,9 +54,6 @@ func LoadConfig() *Config {
 		AuthCodeSessionTTL:          getIntEnv("AUTH_CODE_SESSION_TTL", 300),
 		AuthCodeValidateRedirectURI: getBoolEnv("AUTH_CODE_VALIDATE_REDIRECT_URI", false),
 		AuthCodeAllowedRedirectURIs: getEnv("AUTH_CODE_ALLOWED_REDIRECT_URIS", ""),
-
-		// OIDC settings (id_token specific)
-		OIDCEnableJWTSigning: getBoolEnv("OIDC_ENABLE_JWT_SIGNING", false),
 	}
 }
 

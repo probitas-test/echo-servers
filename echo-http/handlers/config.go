@@ -22,9 +22,6 @@ type Config struct {
 	AuthCodeSessionTTL          int
 	AuthCodeValidateRedirectURI bool
 	AuthCodeAllowedRedirectURIs string
-
-	// OIDC Configuration (id_token specific)
-	OIDCEnableJWTSigning bool
 }
 
 // SetConfig sets the global configuration for handlers.
