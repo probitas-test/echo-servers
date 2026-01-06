@@ -19,18 +19,28 @@
 | `HOST`   | `0.0.0.0` | Bind address |
 | `PORT`   | `80`      | Listen port  |
 
+### Authentication Configuration
+
+Shared credentials used across all authentication methods.
+
+| Variable                 | Default    | Description                                                    |
+| ------------------------ | ---------- | -------------------------------------------------------------- |
+| `AUTH_ALLOWED_USERNAME`  | `testuser` | Username for Basic Auth, Bearer Token, and OAuth2/OIDC flows   |
+| `AUTH_ALLOWED_PASSWORD`  | `testpass` | Password for Basic Auth, Bearer Token, and OAuth2/OIDC flows   |
+
 ### OAuth2/OIDC Configuration
 
 Configure OAuth2/OIDC server behavior with these environment variables:
 
 **OAuth2 Configuration (shared across all flows):**
 
-| Variable                     | Default                 | Description                                    |
-| ---------------------------- | ----------------------- | ---------------------------------------------- |
-| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)    | Allowed client_id for validation (empty = any) |
-| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client) | Required client_secret (empty = not required)  |
-| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes       |
-| `AUTH_TOKEN_EXPIRY`          | `3600`                  | Access token expiry in seconds                 |
+| Variable                     | Default                                                           | Description                                    |
+| ---------------------------- | ----------------------------------------------------------------- | ---------------------------------------------- |
+| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)                                              | Allowed client_id for validation (empty = any) |
+| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client)                                           | Required client_secret (empty = not required)  |
+| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`                                            | Comma-separated list of supported scopes       |
+| `AUTH_TOKEN_EXPIRY`          | `3600`                                                            | Access token expiry in seconds                 |
+| `AUTH_ALLOWED_GRANT_TYPES`   | `authorization_code,client_credentials,password,refresh_token`    | Comma-separated list of allowed grant types    |
 
 **Authorization Code Flow Configuration:**
 
@@ -41,12 +51,6 @@ Configure OAuth2/OIDC server behavior with these environment variables:
 | `AUTH_CODE_VALIDATE_REDIRECT_URI` | `false`             | Enable redirect_uri validation          |
 | `AUTH_CODE_ALLOWED_REDIRECT_URIS` | (empty - allow all) | Comma-separated redirect URI patterns   |
 
-**OIDC Configuration (id_token specific):**
-
-| Variable                  | Default | Description                                    |
-| ------------------------- | ------- | ---------------------------------------------- |
-| `OIDC_ENABLE_JWT_SIGNING` | `false` | Enable JWT signing (currently not implemented) |
-
 **Example Configuration:**
 
 ```bash
@@ -55,6 +59,7 @@ export AUTH_ALLOWED_CLIENT_ID=my-app-client-id
 export AUTH_ALLOWED_CLIENT_SECRET=my-app-secret
 export AUTH_SUPPORTED_SCOPES=openid,profile,email,custom_scope
 export AUTH_TOKEN_EXPIRY=3600
+export AUTH_ALLOWED_GRANT_TYPES=authorization_code,client_credentials,password,refresh_token
 export AUTH_CODE_REQUIRE_PKCE=true
 export AUTH_CODE_VALIDATE_REDIRECT_URI=true
 export AUTH_CODE_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
@@ -489,8 +494,8 @@ Validate Basic Authentication credentials.
 
 Configure credentials via environment variables:
 
-- `AUTH_ALLOWED_USERNAME`: Expected username
-- `AUTH_ALLOWED_PASSWORD`: Expected password
+- `AUTH_ALLOWED_USERNAME`: Expected username (default: `testuser`)
+- `AUTH_ALLOWED_PASSWORD`: Expected password (default: `testpass`)
 
 **Request:**
 
@@ -515,8 +520,8 @@ Validate Bearer token authentication. The expected token is SHA1(username:passwo
 
 Configure credentials via environment variables:
 
-- `AUTH_ALLOWED_USERNAME`: Username
-- `AUTH_ALLOWED_PASSWORD`: Password
+- `AUTH_ALLOWED_USERNAME`: Username (default: `testuser`)
+- `AUTH_ALLOWED_PASSWORD`: Password (default: `testpass`)
 
 Generate the token:
 
