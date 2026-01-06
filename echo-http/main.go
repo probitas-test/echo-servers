@@ -98,6 +98,9 @@ func main() {
 	// Basic Auth (environment-based)
 	r.Get("/basic-auth", handlers.BasicAuthEnvHandler)
 
+	// Bearer Token Auth (environment-based)
+	r.Get("/bearer-auth", handlers.BearerAuthEnvHandler)
+
 	// Cookie endpoints
 	r.Get("/cookies", handlers.CookiesHandler)
 	r.Get("/cookies/set", handlers.CookiesSetHandler)
