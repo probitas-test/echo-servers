@@ -20,6 +20,19 @@ func main() {
 	// Set API docs content for handler
 	handlers.SetAPIDocs(apiDocs)
 
+	// Set OIDC config for handlers
+	handlers.SetConfig(&handlers.Config{
+		OIDCClientID:            cfg.OIDCClientID,
+		OIDCClientSecret:        cfg.OIDCClientSecret,
+		OIDCSupportedScopes:     cfg.OIDCSupportedScopes,
+		OIDCRequirePKCE:         cfg.OIDCRequirePKCE,
+		OIDCSessionTTL:          cfg.OIDCSessionTTL,
+		OIDCTokenExpiry:         cfg.OIDCTokenExpiry,
+		OIDCValidateRedirectURI: cfg.OIDCValidateRedirectURI,
+		OIDCAllowedRedirectURIs: cfg.OIDCAllowedRedirectURIs,
+		OIDCEnableJWTSigning:    cfg.OIDCEnableJWTSigning,
+	})
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
@@ -60,10 +73,12 @@ func main() {
 
 	// OIDC endpoints
 	r.Get("/oidc/{user}/{pass}/.well-known/openid-configuration", handlers.OIDCDiscoveryHandler)
+	r.Get("/oidc/{user}/{pass}/.well-known/jwks.json", handlers.OIDCJWKSHandler)
 	r.Get("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
 	r.Post("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
 	r.Get("/oidc/{user}/{pass}/callback", handlers.OIDCCallbackHandler)
 	r.Post("/oidc/{user}/{pass}/token", handlers.OIDCTokenHandler)
+	r.Get("/oidc/{user}/{pass}/userinfo", handlers.OIDCUserInfoHandler)
 	r.Get("/oidc/{user}/{pass}/demo", handlers.OIDCDemoHandler)
 
 	// Cookie endpoints
