@@ -69,16 +69,6 @@ func main() {
 	r.Get("/absolute-redirect/{n}", handlers.AbsoluteRedirectHandler)
 	r.Get("/relative-redirect/{n}", handlers.RelativeRedirectHandler)
 
-	// OIDC endpoints
-	r.Get("/oidc/{user}/{pass}/.well-known/openid-configuration", handlers.OIDCDiscoveryHandler)
-	r.Get("/oidc/{user}/{pass}/.well-known/jwks.json", handlers.OIDCJWKSHandler)
-	r.Get("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
-	r.Post("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
-	r.Get("/oidc/{user}/{pass}/callback", handlers.OIDCCallbackHandler)
-	r.Post("/oidc/{user}/{pass}/token", handlers.OIDCTokenHandler)
-	r.Get("/oidc/{user}/{pass}/userinfo", handlers.OIDCUserInfoHandler)
-	r.Get("/oidc/{user}/{pass}/demo", handlers.OIDCDemoHandler)
-
 	// OAuth2/OIDC endpoints (environment-based auth)
 	r.Get("/.well-known/oauth-authorization-server", handlers.OAuth2MetadataHandler)
 	r.Get("/.well-known/openid-configuration", handlers.OIDCDiscoveryRootHandler)
