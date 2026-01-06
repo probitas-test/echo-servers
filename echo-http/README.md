@@ -19,6 +19,8 @@ docker run -p 8080:80 ghcr.io/probitas-test/echo-http:latest
 
 ## Environment Variables
 
+### Server Configuration
+
 | Variable | Default   | Description  |
 | -------- | --------- | ------------ |
 | `HOST`   | `0.0.0.0` | Bind address |
@@ -31,6 +33,11 @@ docker run -p 3000:3000 -e PORT=3000 ghcr.io/probitas-test/echo-http:latest
 # Using .env file
 docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-http:latest
 ```
+
+### OAuth2/OIDC Configuration
+
+For OAuth2/OIDC functionality configuration (client validation, scopes, PKCE, etc.),
+see the [Environment Variables](./docs/api.md#environment-variables) section in the API documentation.
 
 ## API
 
@@ -69,16 +76,23 @@ docker run -p 8080:8080 -v $(pwd)/.env:/app/.env ghcr.io/probitas-test/echo-http
 
 ### Authentication Endpoints
 
-| Endpoint                                               | Method   | Description                              |
-| ------------------------------------------------------ | -------- | ---------------------------------------- |
-| `/basic-auth/{user}/{pass}`                            | GET      | Basic auth (200 if match, 401 otherwise) |
-| `/hidden-basic-auth/{user}/{pass}`                     | GET      | Basic auth (200 if match, 404 otherwise) |
-| `/bearer`                                              | GET      | Bearer token validation                  |
-| `/oidc/{user}/{pass}/.well-known/openid-configuration` | GET      | OIDC Discovery metadata (mock)           |
-| `/oidc/{user}/{pass}/authorize`                        | GET/POST | OIDC authorization endpoint (mock)       |
-| `/oidc/{user}/{pass}/callback`                         | GET      | OIDC callback handler                    |
-| `/oidc/{user}/{pass}/token`                            | POST     | OIDC token endpoint (mock)               |
-| `/oidc/{user}/{pass}/demo`                             | GET      | Interactive OIDC flow demo (browser)     |
+| Endpoint                           | Method | Description                              |
+| ---------------------------------- | ------ | ---------------------------------------- |
+| `/basic-auth/{user}/{pass}`        | GET    | Basic auth (200 if match, 401 otherwise) |
+| `/hidden-basic-auth/{user}/{pass}` | GET    | Basic auth (200 if match, 404 otherwise) |
+| `/bearer`                          | GET    | Bearer token validation                  |
+
+### OIDC Endpoints
+
+| Endpoint                                               | Method   | Description                          |
+| ------------------------------------------------------ | -------- | ------------------------------------ |
+| `/oidc/{user}/{pass}/.well-known/openid-configuration` | GET      | OIDC Discovery metadata (mock)       |
+| `/oidc/{user}/{pass}/.well-known/jwks.json`            | GET      | JWKS endpoint (JSON Web Key Set)     |
+| `/oidc/{user}/{pass}/authorize`                        | GET/POST | OIDC authorization endpoint (mock)   |
+| `/oidc/{user}/{pass}/callback`                         | GET      | OIDC callback handler                |
+| `/oidc/{user}/{pass}/token`                            | POST     | OIDC token endpoint (mock)           |
+| `/oidc/{user}/{pass}/userinfo`                         | GET      | UserInfo endpoint                    |
+| `/oidc/{user}/{pass}/demo`                             | GET      | Interactive OIDC flow demo (browser) |
 
 ### Cookie Endpoints
 

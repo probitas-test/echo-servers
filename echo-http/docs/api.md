@@ -10,6 +10,68 @@
 > **Note:** The container listens on port 80. When using `docker compose up`, the
 > port is mapped to 18080 on the host.
 
+## Environment Variables
+
+### Server Configuration
+
+| Variable | Default   | Description  |
+| -------- | --------- | ------------ |
+| `HOST`   | `0.0.0.0` | Bind address |
+| `PORT`   | `80`      | Listen port  |
+
+### OAuth2/OIDC Configuration
+
+Configure OAuth2/OIDC server behavior with these environment variables:
+
+**OAuth2 Configuration (shared across all flows):**
+
+| Variable                     | Default                 | Description                                    |
+| ---------------------------- | ----------------------- | ---------------------------------------------- |
+| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)    | Allowed client_id for validation (empty = any) |
+| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client) | Required client_secret (empty = not required)  |
+| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes       |
+| `AUTH_TOKEN_EXPIRY`          | `3600`                  | Access token expiry in seconds                 |
+
+**Authorization Code Flow Configuration:**
+
+| Variable                          | Default             | Description                             |
+| --------------------------------- | ------------------- | --------------------------------------- |
+| `AUTH_CODE_REQUIRE_PKCE`          | `false`             | Require PKCE for all clients (RFC 8252) |
+| `AUTH_CODE_SESSION_TTL`           | `300`               | Session timeout in seconds              |
+| `AUTH_CODE_VALIDATE_REDIRECT_URI` | `false`             | Enable redirect_uri validation          |
+| `AUTH_CODE_ALLOWED_REDIRECT_URIS` | (empty - allow all) | Comma-separated redirect URI patterns   |
+
+**OIDC Configuration (id_token specific):**
+
+| Variable                  | Default | Description                                    |
+| ------------------------- | ------- | ---------------------------------------------- |
+| `OIDC_ENABLE_JWT_SIGNING` | `false` | Enable JWT signing (currently not implemented) |
+
+**Example Configuration:**
+
+```bash
+# Strict validation for production-like testing
+export AUTH_ALLOWED_CLIENT_ID=my-app-client-id
+export AUTH_ALLOWED_CLIENT_SECRET=my-app-secret
+export AUTH_SUPPORTED_SCOPES=openid,profile,email,custom_scope
+export AUTH_TOKEN_EXPIRY=3600
+export AUTH_CODE_REQUIRE_PKCE=true
+export AUTH_CODE_VALIDATE_REDIRECT_URI=true
+export AUTH_CODE_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
+export AUTH_CODE_SESSION_TTL=300
+```
+
+### Redirect URI Patterns
+
+When `AUTH_CODE_VALIDATE_REDIRECT_URI=true`, supports these patterns:
+
+- **Exact match**: `http://localhost:8080/callback`
+- **Wildcard port**: `http://localhost:*/callback` (any port)
+- **Wildcard path**: `http://localhost:8080/*` (any path)
+- **Multiple patterns**: Comma-separated list
+
+---
+
 ## Endpoints
 
 ### GET /get
@@ -484,62 +546,15 @@ curl -H "Authorization: Bearer my-token-123" http://localhost:80/bearer
 
 **Response (failure):** 401 Unauthorized with `WWW-Authenticate: Bearer` header.
 
-### OIDC (OpenID Connect) Test Server
+---
 
-A fully-featured OIDC Authorization Code Flow test server for developing and testing
-OIDC clients. Implements OpenID Connect Core 1.0 with support for PKCE, scope
-validation, and configurable client authentication.
+## OIDC Endpoints
 
-#### Environment Variables
+A fully-featured OIDC test server for developing and testing OIDC clients.
+Implements OpenID Connect Core 1.0 Authorization Code Flow with support for PKCE,
+scope validation, and configurable client authentication.
 
-Configure OAuth2/OIDC server behavior with these environment variables:
-
-**OAuth2 Configuration (shared across all flows):**
-
-| Variable                     | Default                 | Description                                         |
-| ---------------------------- | ----------------------- | --------------------------------------------------- |
-| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)    | Allowed client_id for validation (empty = any)      |
-| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client) | Required client_secret (empty = not required)       |
-| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes            |
-| `AUTH_TOKEN_EXPIRY`          | `3600`                  | Access token expiry in seconds                      |
-
-**Authorization Code Flow Configuration:**
-
-| Variable                          | Default             | Description                                     |
-| --------------------------------- | ------------------- | ----------------------------------------------- |
-| `AUTH_CODE_REQUIRE_PKCE`          | `false`             | Require PKCE for all clients (RFC 8252)         |
-| `AUTH_CODE_SESSION_TTL`           | `300`               | Session timeout in seconds                      |
-| `AUTH_CODE_VALIDATE_REDIRECT_URI` | `false`             | Enable redirect_uri validation                  |
-| `AUTH_CODE_ALLOWED_REDIRECT_URIS` | (empty - allow all) | Comma-separated redirect URI patterns           |
-
-**OIDC Configuration (id_token specific):**
-
-| Variable                  | Default | Description                                    |
-| ------------------------- | ------- | ---------------------------------------------- |
-| `OIDC_ENABLE_JWT_SIGNING` | `false` | Enable JWT signing (currently not implemented) |
-
-**Example Configuration:**
-
-```bash
-# Strict validation for production-like testing
-export AUTH_ALLOWED_CLIENT_ID=my-app-client-id
-export AUTH_ALLOWED_CLIENT_SECRET=my-app-secret
-export AUTH_SUPPORTED_SCOPES=openid,profile,email,custom_scope
-export AUTH_TOKEN_EXPIRY=3600
-export AUTH_CODE_REQUIRE_PKCE=true
-export AUTH_CODE_VALIDATE_REDIRECT_URI=true
-export AUTH_CODE_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
-export AUTH_CODE_SESSION_TTL=300
-```
-
-#### Redirect URI Patterns
-
-When `AUTH_CODE_VALIDATE_REDIRECT_URI=true`, supports these patterns:
-
-- **Exact match**: `http://localhost:8080/callback`
-- **Wildcard port**: `http://localhost:*/callback` (any port)
-- **Wildcard path**: `http://localhost:8080/*` (any path)
-- **Multiple patterns**: Comma-separated list
+See the [Environment Variables](#environment-variables) section for configuration options.
 
 ### GET /oidc/{user}/{pass}/.well-known/openid-configuration
 
