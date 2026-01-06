@@ -26,6 +26,9 @@ func main() {
 		AuthAllowedClientSecret:     cfg.AuthAllowedClientSecret,
 		AuthSupportedScopes:         cfg.AuthSupportedScopes,
 		AuthTokenExpiry:             cfg.AuthTokenExpiry,
+		AuthAllowedGrantTypes:       cfg.AuthAllowedGrantTypes,
+		AuthAllowedUsername:         cfg.AuthAllowedUsername,
+		AuthAllowedPassword:         cfg.AuthAllowedPassword,
 		AuthCodeRequirePKCE:         cfg.AuthCodeRequirePKCE,
 		AuthCodeSessionTTL:          cfg.AuthCodeSessionTTL,
 		AuthCodeValidateRedirectURI: cfg.AuthCodeValidateRedirectURI,
@@ -80,6 +83,17 @@ func main() {
 	r.Post("/oidc/{user}/{pass}/token", handlers.OIDCTokenHandler)
 	r.Get("/oidc/{user}/{pass}/userinfo", handlers.OIDCUserInfoHandler)
 	r.Get("/oidc/{user}/{pass}/demo", handlers.OIDCDemoHandler)
+
+	// OAuth2/OIDC endpoints (environment-based auth)
+	r.Get("/.well-known/oauth-authorization-server", handlers.OAuth2MetadataHandler)
+	r.Get("/.well-known/openid-configuration", handlers.OIDCDiscoveryRootHandler)
+	r.Get("/.well-known/jwks.json", handlers.OAuth2JWKSHandler)
+	r.Get("/oauth2/authorize", handlers.OAuth2AuthorizeHandler)
+	r.Post("/oauth2/authorize", handlers.OAuth2AuthorizeHandler)
+	r.Get("/oauth2/callback", handlers.OAuth2CallbackHandler)
+	r.Post("/oauth2/token", handlers.OAuth2TokenHandler)
+	r.Get("/oauth2/userinfo", handlers.OAuth2UserInfoHandler)
+	r.Get("/oauth2/demo", handlers.OAuth2DemoHandler)
 
 	// Cookie endpoints
 	r.Get("/cookies", handlers.CookiesHandler)

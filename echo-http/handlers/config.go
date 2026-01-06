@@ -11,6 +11,11 @@ type Config struct {
 	AuthAllowedClientSecret string
 	AuthSupportedScopes     []string
 	AuthTokenExpiry         int
+	AuthAllowedGrantTypes   []string
+
+	// Resource Owner Password Credentials / Basic Auth
+	AuthAllowedUsername string
+	AuthAllowedPassword string
 
 	// Authorization Code Flow Configuration
 	AuthCodeRequirePKCE         bool

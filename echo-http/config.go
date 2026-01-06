@@ -17,6 +17,11 @@ type Config struct {
 	AuthAllowedClientSecret string
 	AuthSupportedScopes     []string
 	AuthTokenExpiry         int
+	AuthAllowedGrantTypes   []string
+
+	// Resource Owner Password Credentials / Basic Auth
+	AuthAllowedUsername string
+	AuthAllowedPassword string
 
 	// Authorization Code Flow Configuration
 	AuthCodeRequirePKCE         bool
@@ -41,6 +46,11 @@ func LoadConfig() *Config {
 		AuthAllowedClientSecret: getEnv("AUTH_ALLOWED_CLIENT_SECRET", ""),
 		AuthSupportedScopes:     parseScopes(getEnv("AUTH_SUPPORTED_SCOPES", "openid,profile,email")),
 		AuthTokenExpiry:         getIntEnv("AUTH_TOKEN_EXPIRY", 3600),
+		AuthAllowedGrantTypes:   parseGrantTypes(getEnv("AUTH_ALLOWED_GRANT_TYPES", "authorization_code,client_credentials")),
+
+		// Resource Owner Password Credentials / Basic Auth settings
+		AuthAllowedUsername: getEnv("AUTH_ALLOWED_USERNAME", "testuser"),
+		AuthAllowedPassword: getEnv("AUTH_ALLOWED_PASSWORD", "testpass"),
 
 		// Authorization Code Flow settings
 		AuthCodeRequirePKCE:         getBoolEnv("AUTH_CODE_REQUIRE_PKCE", false),
@@ -71,6 +81,19 @@ func parseScopes(s string) []string {
 	result := make([]string, 0, len(scopes))
 	for _, scope := range scopes {
 		if trimmed := strings.TrimSpace(scope); trimmed != "" {
+			result = append(result, trimmed)
+		}
+	}
+	return result
+}
+
+// parseGrantTypes parses comma-separated grant types into a slice of strings.
+// Empty values and surrounding whitespace are trimmed.
+func parseGrantTypes(s string) []string {
+	grantTypes := strings.Split(s, ",")
+	result := make([]string, 0, len(grantTypes))
+	for _, grantType := range grantTypes {
+		if trimmed := strings.TrimSpace(grantType); trimmed != "" {
 			result = append(result, trimmed)
 		}
 	}
