@@ -95,6 +95,9 @@ func main() {
 	r.Get("/oauth2/userinfo", handlers.OAuth2UserInfoHandler)
 	r.Get("/oauth2/demo", handlers.OAuth2DemoHandler)
 
+	// Basic Auth (environment-based)
+	r.Get("/basic-auth", handlers.BasicAuthEnvHandler)
+
 	// Cookie endpoints
 	r.Get("/cookies", handlers.CookiesHandler)
 	r.Get("/cookies/set", handlers.CookiesSetHandler)
