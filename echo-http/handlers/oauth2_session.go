@@ -31,12 +31,24 @@ type AuthCode struct {
 	CreatedAt           time.Time
 }
 
+// RefreshToken represents a refresh token for obtaining new access tokens
+type RefreshToken struct {
+	Token     string
+	Username  string
+	ClientID  string
+	Scope     string
+	Nonce     string // OIDC nonce parameter (preserved from original authorization)
+	CreatedAt time.Time
+}
+
 // SessionStore provides in-memory storage for OIDC sessions and authorization codes
 type SessionStore struct {
-	sessions  map[string]*Session // key = session ID
-	authCodes map[string]*AuthCode
-	mu        sync.RWMutex
-	ttl       time.Duration
+	sessions      map[string]*Session // key = session ID
+	authCodes     map[string]*AuthCode
+	refreshTokens map[string]*RefreshToken
+	mu            sync.RWMutex
+	ttl           time.Duration
+	refreshTTL    time.Duration // Separate TTL for refresh tokens (longer than auth codes)
 }
 
 var (
@@ -47,9 +59,11 @@ var (
 // NewSessionStore creates a new session store with the given TTL
 func NewSessionStore(ttl time.Duration) *SessionStore {
 	store := &SessionStore{
-		sessions:  make(map[string]*Session),
-		authCodes: make(map[string]*AuthCode),
-		ttl:       ttl,
+		sessions:      make(map[string]*Session),
+		authCodes:     make(map[string]*AuthCode),
+		refreshTokens: make(map[string]*RefreshToken),
+		ttl:           ttl,
+		refreshTTL:    24 * time.Hour, // Refresh tokens live much longer
 	}
 	// Start cleanup goroutine
 	go store.cleanup()
@@ -156,6 +170,54 @@ func (s *SessionStore) DeleteAuthCode(code string) {
 	s.mu.Unlock()
 }
 
+// CreateRefreshToken creates a new refresh token
+func (s *SessionStore) CreateRefreshToken(username, clientID, scope, nonce string) (*RefreshToken, error) {
+	token, err := generateRandomString(32)
+	if err != nil {
+		return nil, err
+	}
+
+	refreshToken := &RefreshToken{
+		Token:     token,
+		Username:  username,
+		ClientID:  clientID,
+		Scope:     scope,
+		Nonce:     nonce,
+		CreatedAt: time.Now(),
+	}
+
+	s.mu.Lock()
+	s.refreshTokens[token] = refreshToken
+	s.mu.Unlock()
+
+	return refreshToken, nil
+}
+
+// GetRefreshToken retrieves a refresh token
+func (s *SessionStore) GetRefreshToken(token string) (*RefreshToken, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	refreshToken, ok := s.refreshTokens[token]
+	if !ok {
+		return nil, false
+	}
+
+	// Check if refresh token is expired
+	if time.Since(refreshToken.CreatedAt) > s.refreshTTL {
+		return nil, false
+	}
+
+	return refreshToken, true
+}
+
+// DeleteRefreshToken removes a refresh token
+func (s *SessionStore) DeleteRefreshToken(token string) {
+	s.mu.Lock()
+	delete(s.refreshTokens, token)
+	s.mu.Unlock()
+}
+
 // cleanup periodically removes expired sessions and auth codes
 func (s *SessionStore) cleanup() {
 	ticker := time.NewTicker(1 * time.Minute)
@@ -176,6 +238,13 @@ func (s *SessionStore) cleanup() {
 		for code, authCode := range s.authCodes {
 			if now.Sub(authCode.CreatedAt) > s.ttl {
 				delete(s.authCodes, code)
+			}
+		}
+
+		// Clean up expired refresh tokens
+		for token, refreshToken := range s.refreshTokens {
+			if now.Sub(refreshToken.CreatedAt) > s.refreshTTL {
+				delete(s.refreshTokens, token)
 			}
 		}
 

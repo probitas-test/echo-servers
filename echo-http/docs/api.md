@@ -10,6 +10,68 @@
 > **Note:** The container listens on port 80. When using `docker compose up`, the
 > port is mapped to 18080 on the host.
 
+## Environment Variables
+
+### Server Configuration
+
+| Variable | Default   | Description  |
+| -------- | --------- | ------------ |
+| `HOST`   | `0.0.0.0` | Bind address |
+| `PORT`   | `80`      | Listen port  |
+
+### OAuth2/OIDC Configuration
+
+Configure OAuth2/OIDC server behavior with these environment variables:
+
+**OAuth2 Configuration (shared across all flows):**
+
+| Variable                     | Default                 | Description                                    |
+| ---------------------------- | ----------------------- | ---------------------------------------------- |
+| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)    | Allowed client_id for validation (empty = any) |
+| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client) | Required client_secret (empty = not required)  |
+| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes       |
+| `AUTH_TOKEN_EXPIRY`          | `3600`                  | Access token expiry in seconds                 |
+
+**Authorization Code Flow Configuration:**
+
+| Variable                          | Default             | Description                             |
+| --------------------------------- | ------------------- | --------------------------------------- |
+| `AUTH_CODE_REQUIRE_PKCE`          | `false`             | Require PKCE for all clients (RFC 8252) |
+| `AUTH_CODE_SESSION_TTL`           | `300`               | Session timeout in seconds              |
+| `AUTH_CODE_VALIDATE_REDIRECT_URI` | `false`             | Enable redirect_uri validation          |
+| `AUTH_CODE_ALLOWED_REDIRECT_URIS` | (empty - allow all) | Comma-separated redirect URI patterns   |
+
+**OIDC Configuration (id_token specific):**
+
+| Variable                  | Default | Description                                    |
+| ------------------------- | ------- | ---------------------------------------------- |
+| `OIDC_ENABLE_JWT_SIGNING` | `false` | Enable JWT signing (currently not implemented) |
+
+**Example Configuration:**
+
+```bash
+# Strict validation for production-like testing
+export AUTH_ALLOWED_CLIENT_ID=my-app-client-id
+export AUTH_ALLOWED_CLIENT_SECRET=my-app-secret
+export AUTH_SUPPORTED_SCOPES=openid,profile,email,custom_scope
+export AUTH_TOKEN_EXPIRY=3600
+export AUTH_CODE_REQUIRE_PKCE=true
+export AUTH_CODE_VALIDATE_REDIRECT_URI=true
+export AUTH_CODE_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
+export AUTH_CODE_SESSION_TTL=300
+```
+
+### Redirect URI Patterns
+
+When `AUTH_CODE_VALIDATE_REDIRECT_URI=true`, supports these patterns:
+
+- **Exact match**: `http://localhost:8080/callback`
+- **Wildcard port**: `http://localhost:*/callback` (any port)
+- **Wildcard path**: `http://localhost:8080/*` (any path)
+- **Multiple patterns**: Comma-separated list
+
+---
+
 ## Endpoints
 
 ### GET /get
@@ -421,20 +483,19 @@ curl -L http://localhost:80/relative-redirect/3
 
 ## Authentication Endpoints
 
-### GET /basic-auth/{user}/{pass}
+### GET /basic-auth
 
-Validate Basic Authentication credentials. Returns 200 if credentials match, 401
-otherwise.
+Validate Basic Authentication credentials.
 
-| Parameter | Type   | Description       |
-| --------- | ------ | ----------------- |
-| `user`    | string | Expected username |
-| `pass`    | string | Expected password |
+Configure credentials via environment variables:
+
+- `AUTH_ALLOWED_USERNAME`: Expected username
+- `AUTH_ALLOWED_PASSWORD`: Expected password
 
 **Request:**
 
 ```bash
-curl -u testuser:testpass http://localhost:80/basic-auth/testuser/testpass
+curl -u testuser:testpass http://localhost:80/basic-auth
 ```
 
 **Response (success):**
@@ -448,29 +509,25 @@ curl -u testuser:testpass http://localhost:80/basic-auth/testuser/testpass
 
 **Response (failure):** 401 Unauthorized with `WWW-Authenticate: Basic` header.
 
-### GET /hidden-basic-auth/{user}/{pass}
+### GET /bearer-auth
 
-Similar to `/basic-auth` but returns 404 instead of 401 on authentication failure.
-Useful for testing authentication without browser prompts.
+Validate Bearer token authentication. The expected token is SHA1(username:password).
 
-| Parameter | Type   | Description       |
-| --------- | ------ | ----------------- |
-| `user`    | string | Expected username |
-| `pass`    | string | Expected password |
+Configure credentials via environment variables:
+
+- `AUTH_ALLOWED_USERNAME`: Username
+- `AUTH_ALLOWED_PASSWORD`: Password
+
+Generate the token:
 
 ```bash
-curl -u testuser:testpass http://localhost:80/hidden-basic-auth/testuser/testpass
+echo -n "username:password" | shasum -a 1 | cut -d' ' -f1
 ```
-
-### GET /bearer
-
-Validate Bearer token authentication. Returns 200 if a valid Bearer token is present,
-401 otherwise.
 
 **Request:**
 
 ```bash
-curl -H "Authorization: Bearer my-token-123" http://localhost:80/bearer
+curl -H "Authorization: Bearer <sha1-token>" http://localhost:80/bearer-auth
 ```
 
 **Response (success):**
@@ -478,80 +535,66 @@ curl -H "Authorization: Bearer my-token-123" http://localhost:80/bearer
 ```json
 {
   "authenticated": true,
-  "token": "my-token-123"
+  "token": "<sha1-token>"
 }
 ```
 
 **Response (failure):** 401 Unauthorized with `WWW-Authenticate: Bearer` header.
 
-### OIDC (OpenID Connect) Test Server
+---
 
-A fully-featured OIDC Authorization Code Flow test server for developing and testing
-OIDC clients. Implements OpenID Connect Core 1.0 with support for PKCE, scope
-validation, and configurable client authentication.
+## OAuth2/OIDC Endpoints
 
-#### Environment Variables
+A fully-featured OAuth2/OIDC test server for developing and testing OAuth2 and OIDC clients.
+Implements OAuth 2.0 Authorization Framework and OpenID Connect Core 1.0 Authorization Code Flow
+with support for PKCE, scope validation, and configurable client authentication.
 
-Configure OIDC server behavior with these environment variables:
+All endpoints use environment-based authentication. See the [Environment Variables](#environment-variables)
+section for configuration options.
 
-| Variable                     | Default                 | Description                                    |
-| ---------------------------- | ----------------------- | ---------------------------------------------- |
-| `OIDC_CLIENT_ID`             | (empty - accept any)    | Expected client_id (empty = any client_id)     |
-| `OIDC_CLIENT_SECRET`         | (empty - public client) | Required client_secret (empty = not required)  |
-| `OIDC_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes       |
-| `OIDC_REQUIRE_PKCE`          | `false`                 | Require PKCE for all clients (RFC 8252)        |
-| `OIDC_VALIDATE_REDIRECT_URI` | `false`                 | Enable redirect_uri validation                 |
-| `OIDC_ALLOWED_REDIRECT_URIS` | (empty - allow all)     | Comma-separated redirect URI patterns          |
-| `OIDC_SESSION_TTL`           | `300`                   | Session timeout in seconds                     |
-| `OIDC_TOKEN_EXPIRY`          | `3600`                  | Token expiry in seconds                        |
-| `OIDC_ENABLE_JWT_SIGNING`    | `false`                 | Enable JWT signing (currently not implemented) |
+### GET /.well-known/oauth-authorization-server
 
-**Example Configuration:**
-
-```bash
-# Strict validation for production-like testing
-export OIDC_CLIENT_ID=my-app-client-id
-export OIDC_CLIENT_SECRET=my-app-secret
-export OIDC_SUPPORTED_SCOPES=openid,profile,email,custom_scope
-export OIDC_REQUIRE_PKCE=true
-export OIDC_VALIDATE_REDIRECT_URI=true
-export OIDC_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
-```
-
-#### Redirect URI Patterns
-
-When `OIDC_VALIDATE_REDIRECT_URI=true`, supports these patterns:
-
-- **Exact match**: `http://localhost:8080/callback`
-- **Wildcard port**: `http://localhost:*/callback` (any port)
-- **Wildcard path**: `http://localhost:8080/*` (any path)
-- **Multiple patterns**: Comma-separated list
-
-### GET /oidc/{user}/{pass}/.well-known/openid-configuration
-
-OpenID Connect Discovery endpoint (OIDC Discovery 1.0). Returns provider metadata
-including endpoints, supported features, and capabilities.
-
-**Path Parameters:**
-
-- `user`: Username for authentication
-- `pass`: Password for authentication
+OAuth 2.0 Authorization Server Metadata endpoint (RFC 8414).
 
 **Request:**
 
 ```bash
-curl http://localhost:80/oidc/testuser/testpass/.well-known/openid-configuration
+curl http://localhost:80/.well-known/oauth-authorization-server
 ```
 
 **Response:**
 
 ```json
 {
-  "issuer": "http://localhost:80/oidc/testuser/testpass",
-  "authorization_endpoint": "http://localhost:80/oidc/testuser/testpass/authorize",
-  "token_endpoint": "http://localhost:80/oidc/testuser/testpass/token",
-  "userinfo_endpoint": "http://localhost:80/oidc/testuser/testpass/userinfo",
-  "jwks_uri": "http://localhost:80/oidc/testuser/testpass/.well-known/jwks.json",
+  "issuer": "http://localhost:80",
+  "authorization_endpoint": "http://localhost:80/oauth2/authorize",
+  "token_endpoint": "http://localhost:80/oauth2/token",
+  "response_types_supported": ["code"],
+  "grant_types_supported": ["authorization_code"],
+  "code_challenge_methods_supported": ["plain", "S256"]
+}
+```
+
+### GET /.well-known/openid-configuration
+
+OpenID Connect Discovery endpoint (OIDC Discovery 1.0). Returns provider metadata
+including endpoints, supported features, and capabilities.
+
+**Request:**
+
+```bash
+curl http://localhost:80/.well-known/openid-configuration
+```
+
+**Response:**
+
+```json
+{
+  "issuer": "http://localhost:80",
+  "authorization_endpoint": "http://localhost:80/oauth2/authorize",
+  "token_endpoint": "http://localhost:80/oauth2/token",
+  "userinfo_endpoint": "http://localhost:80/oauth2/userinfo",
+  "jwks_uri": "http://localhost:80/.well-known/jwks.json",
   "response_types_supported": ["code"],
   "subject_types_supported": ["public"],
   "id_token_signing_alg_values_supported": ["none"],
@@ -561,48 +604,58 @@ curl http://localhost:80/oidc/testuser/testpass/.well-known/openid-configuration
 }
 ```
 
+### GET /.well-known/jwks.json
+
+JWKS (JSON Web Key Set) endpoint returning the public keys used to verify JWT signatures (RFC 7517).
+
+**Request:**
+
+```bash
+curl http://localhost:80/.well-known/jwks.json
+```
+
+**Response:**
+
+```json
+{
+  "keys": []
+}
+```
+
 **Notes:**
 
-- The `issuer` and endpoint URLs are dynamically generated based on the request
-- Supports `X-Forwarded-Proto` header for proxy environments (http/https detection)
-- `scopes_supported` reflects `OIDC_SUPPORTED_SCOPES` configuration
-- ID tokens use JWT format with `alg: "none"` (no signature)
+- Returns an empty key set because this implementation uses `alg: "none"` (no signature)
+- In a production OIDC provider, this would contain public keys in JWK format
 
-### GET/POST /oidc/{user}/{pass}/authorize
+### GET/POST /oauth2/authorize
 
-OIDC authorization endpoint implementing OpenID Connect Core 1.0 Authorization Code
-Flow with full parameter validation.
+OAuth2/OIDC authorization endpoint implementing Authorization Code Flow with full parameter validation.
 
 **GET:** Display login form for user authentication
 **POST:** Process credentials and generate authorization code
 
-**Path Parameters:**
-
-- `user`: Expected username
-- `pass`: Expected password
-
 **GET Query Parameters:**
 
-| Parameter               | Required | Description                                                   |
-| ----------------------- | -------- | ------------------------------------------------------------- |
-| `client_id`             | **Yes**  | Client identifier (validated if `OIDC_CLIENT_ID` configured)  |
-| `redirect_uri`          | **Yes**  | Callback URI (validated if `OIDC_VALIDATE_REDIRECT_URI=true`) |
-| `response_type`         | **Yes**  | Must be `code`                                                |
-| `scope`                 | No       | Space-separated scopes (default: all supported scopes)        |
-| `state`                 | No       | CSRF protection token (recommended)                           |
-| `nonce`                 | No       | Replay attack protection (included in ID token)               |
-| `code_challenge`        | No       | PKCE code challenge (required if `OIDC_REQUIRE_PKCE=true`)    |
-| `code_challenge_method` | No       | PKCE method: `plain` or `S256` (default: `plain`)             |
+| Parameter               | Required | Description                                                          |
+| ----------------------- | -------- | -------------------------------------------------------------------- |
+| `client_id`             | **Yes**  | Client identifier (validated if `AUTH_ALLOWED_CLIENT_ID` configured) |
+| `redirect_uri`          | **Yes**  | Callback URI (validated if `AUTH_CODE_VALIDATE_REDIRECT_URI=true`)   |
+| `response_type`         | **Yes**  | Must be `code`                                                       |
+| `scope`                 | No       | Space-separated scopes (default: all supported scopes)               |
+| `state`                 | No       | CSRF protection token (recommended)                                  |
+| `nonce`                 | No       | Replay attack protection (included in ID token)                      |
+| `code_challenge`        | No       | PKCE code challenge (required if `AUTH_CODE_REQUIRE_PKCE=true`)      |
+| `code_challenge_method` | No       | PKCE method: `plain` or `S256` (default: `plain`)                    |
 
 **POST Form Parameters:**
 
-- `username` (required): Must match `{user}` in URL
-- `password` (required): Must match `{pass}` in URL
+- `username` (required): Must match `AUTH_ALLOWED_USERNAME`
+- `password` (required): Must match `AUTH_ALLOWED_PASSWORD`
 
-**GET Request (Basic):**
+**Request:**
 
 ```bash
-curl "http://localhost:80/oidc/testuser/testpass/authorize?\
+curl "http://localhost:80/oauth2/authorize?\
 client_id=my-app&\
 redirect_uri=http://localhost:8080/callback&\
 response_type=code&\
@@ -610,63 +663,9 @@ scope=openid%20profile&\
 state=random-csrf-token"
 ```
 
-**GET Request (with PKCE):**
-
-```bash
-curl "http://localhost:80/oidc/testuser/testpass/authorize?\
-client_id=my-app&\
-redirect_uri=http://localhost:8080/callback&\
-response_type=code&\
-scope=openid%20profile&\
-state=random-csrf-token&\
-code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&\
-code_challenge_method=S256&\
-nonce=random-nonce-value"
-```
-
-**GET Response:** HTML login form with session cookie
-
-**POST Request:**
-
-```bash
-curl -X POST http://localhost:80/oidc/testuser/testpass/authorize \
-  -b "oidc_session=<session-id-from-cookie>" \
-  -d "username=testuser" \
-  -d "password=testpass"
-```
-
-**POST Response:** 302 redirect to `redirect_uri` with:
-
-- `code`: Authorization code (single-use, 5-minute expiry)
-- `state`: Original state parameter (if provided)
-
-**Error Responses:**
-
-OAuth 2.0 / OIDC compliant JSON error responses:
-
-```json
-{
-  "error": "invalid_request",
-  "error_description": "client_id parameter is required"
-}
-```
-
-Common error codes:
-
-- `invalid_request`: Missing or invalid required parameter
-- `unauthorized_client`: client_id not authorized
-- `unsupported_response_type`: response_type is not `code`
-- `invalid_scope`: Requested scope not supported
-
-### GET /oidc/{user}/{pass}/callback
+### GET /oauth2/callback
 
 Display the authorization code and state received from the authorization server.
-Provides a UI to exchange the code for tokens.
-
-**Path Parameters:**
-
-- `user`: Username (for URL consistency, not validated at callback)
-- `pass`: Password (for URL consistency, not validated at callback)
 
 **Query Parameters:**
 
@@ -676,62 +675,32 @@ Provides a UI to exchange the code for tokens.
 **Request:**
 
 ```bash
-curl "http://localhost:80/oidc/testuser/testpass/callback?code=abc123&state=xyz789"
+curl "http://localhost:80/oauth2/callback?code=abc123&state=xyz789"
 ```
 
-**Response:** HTML page displaying the code and offering token exchange.
+### POST /oauth2/token
 
-### POST /oidc/{user}/{pass}/token
-
-Token endpoint implementing OAuth 2.0 / OIDC token exchange. Validates authorization
-code and returns access token, ID token (JWT), and refresh token.
-
-**Path Parameters:**
-
-- `user`: Username (for URL consistency)
-- `pass`: Password (for URL consistency)
+Token endpoint implementing OAuth 2.0 / OIDC token exchange.
 
 **Form Parameters:**
 
-| Parameter       | Required | Description                                                  |
-| --------------- | -------- | ------------------------------------------------------------ |
-| `grant_type`    | **Yes**  | Must be `authorization_code`                                 |
-| `code`          | **Yes**  | Authorization code from authorize endpoint                   |
-| `client_id`     | **Yes**  | Client identifier (validated if `OIDC_CLIENT_ID` configured) |
-| `redirect_uri`  | **Yes**  | Must match the URI from authorization request                |
-| `client_secret` | No       | Required if `OIDC_CLIENT_SECRET` is configured               |
-| `code_verifier` | No       | PKCE verifier (required if `code_challenge` was provided)    |
+| Parameter       | Required | Description                                                   |
+| --------------- | -------- | ------------------------------------------------------------- |
+| `grant_type`    | **Yes**  | Must be `authorization_code`                                  |
+| `code`          | **Yes**  | Authorization code from authorize endpoint                    |
+| `client_id`     | **Yes**  | Client identifier (validated if `AUTH_ALLOWED_CLIENT_ID` set) |
+| `redirect_uri`  | **Yes**  | Must match the URI from authorization request                 |
+| `client_secret` | No       | Required if `AUTH_ALLOWED_CLIENT_SECRET` is configured        |
+| `code_verifier` | No       | PKCE verifier (required if `code_challenge` was provided)     |
 
-**Request (Public Client):**
+**Request:**
 
 ```bash
-curl -X POST http://localhost:80/oidc/testuser/testpass/token \
+curl -X POST http://localhost:80/oauth2/token \
   -d "grant_type=authorization_code" \
   -d "code=<authorization-code>" \
   -d "client_id=my-app" \
   -d "redirect_uri=http://localhost:8080/callback"
-```
-
-**Request (Confidential Client):**
-
-```bash
-curl -X POST http://localhost:80/oidc/testuser/testpass/token \
-  -d "grant_type=authorization_code" \
-  -d "code=<authorization-code>" \
-  -d "client_id=my-app" \
-  -d "client_secret=my-app-secret" \
-  -d "redirect_uri=http://localhost:8080/callback"
-```
-
-**Request (with PKCE):**
-
-```bash
-curl -X POST http://localhost:80/oidc/testuser/testpass/token \
-  -d "grant_type=authorization_code" \
-  -d "code=<authorization-code>" \
-  -d "client_id=my-app" \
-  -d "redirect_uri=http://localhost:8080/callback" \
-  -d "code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
 ```
 
 **Response:**
@@ -747,97 +716,9 @@ curl -X POST http://localhost:80/oidc/testuser/testpass/token \
 }
 ```
 
-**ID Token Format:**
+### GET /oauth2/userinfo
 
-ID tokens are returned in JWT format (RFC 7519) with `alg: "none"`:
-
-```
-eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L29pZGMvdGVzdHVzZXIvdGVzdHBhc3MiLCJzdWIiOiJ0ZXN0dXNlciIsImF1ZCI6Im15LWFwcCIsImV4cCI6MTcwOTU2MzIwMCwiaWF0IjoxNzA5NTU5NjAwLCJuYW1lIjoidGVzdHVzZXIiLCJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUuY29tIn0.
-```
-
-**Decoded ID Token Claims:**
-
-```json
-{
-  "iss": "http://localhost/oidc/testuser/testpass",
-  "sub": "testuser",
-  "aud": "my-app",
-  "exp": 1709563200,
-  "iat": 1709559600,
-  "name": "testuser",
-  "email": "testuser@example.com",
-  "nonce": "random-nonce-value"
-}
-```
-
-**Error Responses:**
-
-OAuth 2.0 compliant JSON error responses:
-
-```json
-{
-  "error": "invalid_grant",
-  "error_description": "code_verifier length must be between 43 and 128 characters (RFC 7636)"
-}
-```
-
-Common error codes:
-
-- `invalid_request`: Missing required parameter
-- `invalid_client`: Invalid client_id or client_secret
-- `invalid_grant`: Invalid authorization code, expired code, PKCE verification failed, or code_verifier length invalid (43-128 chars per RFC 7636)
-- `unsupported_grant_type`: grant_type is not `authorization_code`
-
-**Complete OIDC Flow Example:**
-
-```bash
-# Step 1: Discover OIDC configuration
-curl http://localhost:80/oidc/testuser/testpass/.well-known/openid-configuration
-
-# Step 2: Generate PKCE code_verifier and code_challenge (optional but recommended)
-CODE_VERIFIER=$(openssl rand -base64 32 | tr -d '=' | tr '+/' '-_')
-CODE_CHALLENGE=$(echo -n $CODE_VERIFIER | openssl dgst -sha256 -binary | base64 | tr -d '=' | tr '+/' '-_')
-
-# Step 3: Build authorization URL
-AUTH_URL="http://localhost:80/oidc/testuser/testpass/authorize?\
-client_id=my-app&\
-redirect_uri=http://localhost:8080/callback&\
-response_type=code&\
-scope=openid%20profile%20email&\
-state=random-csrf-token&\
-nonce=random-nonce&\
-code_challenge=$CODE_CHALLENGE&\
-code_challenge_method=S256"
-
-# Step 4: Open in browser (displays login form)
-open "$AUTH_URL"
-
-# Step 5: After login and redirect, extract code from callback URL
-# http://localhost:8080/callback?code=AUTHORIZATION_CODE&state=random-csrf-token
-
-# Step 6: Exchange authorization code for tokens
-curl -X POST http://localhost:80/oidc/testuser/testpass/token \
-  -d "grant_type=authorization_code" \
-  -d "code=AUTHORIZATION_CODE" \
-  -d "client_id=my-app" \
-  -d "redirect_uri=http://localhost:8080/callback" \
-  -d "code_verifier=$CODE_VERIFIER"
-
-# Step 7: Decode ID token (optional - for inspection)
-# The ID token is a JWT with format: header.payload.signature
-# You can decode it at jwt.io or using:
-echo "PASTE_ID_TOKEN_HERE" | cut -d'.' -f2 | base64 -d | jq
-```
-
-### GET /oidc/{user}/{pass}/userinfo
-
-UserInfo endpoint returning user profile information based on the access token (OIDC
-Core Section 5.3).
-
-**Path Parameters:**
-
-- `user`: Username (used for generating user info)
-- `pass`: Password (for URL consistency, not validated at userinfo)
+UserInfo endpoint returning user profile information based on the access token (OIDC Core Section 5.3).
 
 **Headers:**
 
@@ -847,94 +728,29 @@ Core Section 5.3).
 
 ```bash
 curl -H "Authorization: Bearer <access-token>" \
-  http://localhost:80/oidc/testuser/testpass/userinfo
+  http://localhost:80/oauth2/userinfo
 ```
 
 **Response:**
 
 ```json
 {
-  "sub": "testuser",
-  "name": "testuser",
-  "email": "testuser@example.com"
+  "sub": "user",
+  "name": "user",
+  "email": "user@example.com"
 }
 ```
 
-**Error Responses:**
+### GET /oauth2/demo
 
-- **401 Unauthorized**: Missing or invalid authorization header
-
-**Notes:**
-
-- This is a mock implementation that accepts any valid Bearer token
-- User information is derived from the `{user}` path parameter
-- In a real implementation, the access token would be validated and used to look up
-  user information
-
-### GET /oidc/{user}/{pass}/.well-known/jwks.json
-
-JWKS (JSON Web Key Set) endpoint returning the public keys used to verify JWT
-signatures (RFC 7517).
-
-**Path Parameters:**
-
-- `user`: Username (for URL consistency)
-- `pass`: Password (for URL consistency)
-
-**Request:**
-
-```bash
-curl http://localhost:80/oidc/testuser/testpass/.well-known/jwks.json
-```
-
-**Response:**
-
-```json
-{
-  "keys": []
-}
-```
-
-**Notes:**
-
-- Returns an empty key set because this implementation uses `alg: "none"` (no
-  signature)
-- In a production OIDC provider, this would contain public keys in JWK format
-- Clients can use this endpoint to discover signing keys dynamically
-
-### GET /oidc/{user}/{pass}/demo
-
-Interactive demonstration of the complete OIDC Authorization Code Flow. This endpoint
-provides a browser-based walkthrough of all OIDC steps with visual feedback.
-
-**Purpose:** Educational tool for understanding OIDC flow and quick manual testing.
-
-**Flow:**
-
-1. Visit `/oidc/{user}/{pass}/demo` → Automatically redirects to authorize endpoint
-2. Complete login form with credentials
-3. View authorization code and state parameter
-4. Click button to exchange code for tokens
-5. View all tokens (access_token, id_token, refresh_token)
+Interactive demonstration of the complete OAuth2/OIDC Authorization Code Flow.
 
 **Usage:**
 
 ```bash
 # Open in browser for interactive demo
-open "http://localhost:80/oidc/testuser/testpass/demo"
+open "http://localhost:80/oauth2/demo"
 ```
-
-**Features:**
-
-- ✅ Zero configuration required - just open in browser
-- ✅ Visual step-by-step flow explanation
-- ✅ One-click token exchange
-- ✅ Displays all tokens and their purposes
-- ✅ Educational notes about OIDC security concepts
-
-**Note:** This is a self-contained demo where the OIDC provider acts as its own
-client. For programmatic testing of actual OIDC client applications, use the
-individual endpoints (`/authorize`, `/token`) with your own redirect_uri.
 
 ---
 

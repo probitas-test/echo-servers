@@ -12,25 +12,28 @@
 
 ## Environment Variables
 
-The server supports the following environment variables for configuration:
+### Server Configuration
+
+| Variable | Default   | Description  |
+| -------- | --------- | ------------ |
+| `HOST`   | `0.0.0.0` | Bind address |
+| `PORT`   | `8080`    | Listen port  |
 
 ### Protocol Control
 
 | Variable             | Default | Description                  |
 | -------------------- | ------- | ---------------------------- |
-| `HOST`               | 0.0.0.0 | Host address to bind         |
-| `PORT`               | 8080    | Port number to listen on     |
-| `DISABLE_CONNECTRPC` | false   | Disable Connect RPC protocol |
-| `DISABLE_GRPC`       | false   | Disable gRPC protocol        |
-| `DISABLE_GRPC_WEB`   | false   | Disable gRPC-Web protocol    |
+| `DISABLE_CONNECTRPC` | `false` | Disable Connect RPC protocol |
+| `DISABLE_GRPC`       | `false` | Disable gRPC protocol        |
+| `DISABLE_GRPC_WEB`   | `false` | Disable gRPC-Web protocol    |
 
 ### Reflection Control
 
 | Variable                          | Default | Description                                                 |
 | --------------------------------- | ------- | ----------------------------------------------------------- |
-| `REFLECTION_INCLUDE_DEPENDENCIES` | false   | Include transitive dependencies (note: not fully supported) |
-| `DISABLE_REFLECTION_V1`           | false   | Disable gRPC reflection v1 API                              |
-| `DISABLE_REFLECTION_V1ALPHA`      | false   | Disable gRPC reflection v1alpha API                         |
+| `REFLECTION_INCLUDE_DEPENDENCIES` | `false` | Include transitive dependencies (note: not fully supported) |
+| `DISABLE_REFLECTION_V1`           | `false` | Disable gRPC reflection v1 API                              |
+| `DISABLE_REFLECTION_V1ALPHA`      | `false` | Disable gRPC reflection v1alpha API                         |
 
 **Note:** At least one protocol must be enabled. The server will refuse to start if all protocols are disabled.
 
@@ -46,6 +49,8 @@ DISABLE_GRPC=true DISABLE_GRPC_WEB=true ./echo-connectrpc
 # Disable reflection v1alpha (for compatibility testing)
 DISABLE_REFLECTION_V1ALPHA=true ./echo-connectrpc
 ```
+
+---
 
 ## Protocol
 

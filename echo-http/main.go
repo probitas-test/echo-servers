@@ -20,17 +20,20 @@ func main() {
 	// Set API docs content for handler
 	handlers.SetAPIDocs(apiDocs)
 
-	// Set OIDC config for handlers
+	// Set OAuth2/OIDC config for handlers
 	handlers.SetConfig(&handlers.Config{
-		OIDCClientID:            cfg.OIDCClientID,
-		OIDCClientSecret:        cfg.OIDCClientSecret,
-		OIDCSupportedScopes:     cfg.OIDCSupportedScopes,
-		OIDCRequirePKCE:         cfg.OIDCRequirePKCE,
-		OIDCSessionTTL:          cfg.OIDCSessionTTL,
-		OIDCTokenExpiry:         cfg.OIDCTokenExpiry,
-		OIDCValidateRedirectURI: cfg.OIDCValidateRedirectURI,
-		OIDCAllowedRedirectURIs: cfg.OIDCAllowedRedirectURIs,
-		OIDCEnableJWTSigning:    cfg.OIDCEnableJWTSigning,
+		AuthAllowedClientID:         cfg.AuthAllowedClientID,
+		AuthAllowedClientSecret:     cfg.AuthAllowedClientSecret,
+		AuthSupportedScopes:         cfg.AuthSupportedScopes,
+		AuthTokenExpiry:             cfg.AuthTokenExpiry,
+		AuthAllowedGrantTypes:       cfg.AuthAllowedGrantTypes,
+		AuthAllowedUsername:         cfg.AuthAllowedUsername,
+		AuthAllowedPassword:         cfg.AuthAllowedPassword,
+		AuthCodeRequirePKCE:         cfg.AuthCodeRequirePKCE,
+		AuthCodeSessionTTL:          cfg.AuthCodeSessionTTL,
+		AuthCodeValidateRedirectURI: cfg.AuthCodeValidateRedirectURI,
+		AuthCodeAllowedRedirectURIs: cfg.AuthCodeAllowedRedirectURIs,
+		OIDCEnableJWTSigning:        cfg.OIDCEnableJWTSigning,
 	})
 
 	r := chi.NewRouter()
@@ -66,20 +69,22 @@ func main() {
 	r.Get("/absolute-redirect/{n}", handlers.AbsoluteRedirectHandler)
 	r.Get("/relative-redirect/{n}", handlers.RelativeRedirectHandler)
 
-	// Authentication endpoints
-	r.Get("/basic-auth/{user}/{pass}", handlers.BasicAuthHandler)
-	r.Get("/hidden-basic-auth/{user}/{pass}", handlers.HiddenBasicAuthHandler)
-	r.Get("/bearer", handlers.BearerHandler)
+	// OAuth2/OIDC endpoints (environment-based auth)
+	r.Get("/.well-known/oauth-authorization-server", handlers.OAuth2MetadataHandler)
+	r.Get("/.well-known/openid-configuration", handlers.OIDCDiscoveryRootHandler)
+	r.Get("/.well-known/jwks.json", handlers.OAuth2JWKSHandler)
+	r.Get("/oauth2/authorize", handlers.OAuth2AuthorizeHandler)
+	r.Post("/oauth2/authorize", handlers.OAuth2AuthorizeHandler)
+	r.Get("/oauth2/callback", handlers.OAuth2CallbackHandler)
+	r.Post("/oauth2/token", handlers.OAuth2TokenHandler)
+	r.Get("/oauth2/userinfo", handlers.OAuth2UserInfoHandler)
+	r.Get("/oauth2/demo", handlers.OAuth2DemoHandler)
 
-	// OIDC endpoints
-	r.Get("/oidc/{user}/{pass}/.well-known/openid-configuration", handlers.OIDCDiscoveryHandler)
-	r.Get("/oidc/{user}/{pass}/.well-known/jwks.json", handlers.OIDCJWKSHandler)
-	r.Get("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
-	r.Post("/oidc/{user}/{pass}/authorize", handlers.OIDCAuthorizeHandler)
-	r.Get("/oidc/{user}/{pass}/callback", handlers.OIDCCallbackHandler)
-	r.Post("/oidc/{user}/{pass}/token", handlers.OIDCTokenHandler)
-	r.Get("/oidc/{user}/{pass}/userinfo", handlers.OIDCUserInfoHandler)
-	r.Get("/oidc/{user}/{pass}/demo", handlers.OIDCDemoHandler)
+	// Basic Auth (environment-based)
+	r.Get("/basic-auth", handlers.BasicAuthEnvHandler)
+
+	// Bearer Token Auth (environment-based)
+	r.Get("/bearer-auth", handlers.BearerAuthEnvHandler)
 
 	// Cookie endpoints
 	r.Get("/cookies", handlers.CookiesHandler)

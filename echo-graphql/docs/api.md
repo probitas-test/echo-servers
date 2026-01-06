@@ -10,14 +10,16 @@
 > **Note:** The container listens on port 8080. When using `docker compose up`, the
 > port is mapped to 14000 on the host.
 
-## Endpoints
+## Environment Variables
 
-| Path          | Description        |
-| ------------- | ------------------ |
-| `/`           | API documentation  |
-| `/graphql`    | GraphQL endpoint   |
-| `/playground` | GraphQL Playground |
-| `/health`     | Health check       |
+### Server Configuration
+
+| Variable | Default   | Description  |
+| -------- | --------- | ------------ |
+| `HOST`   | `0.0.0.0` | Bind address |
+| `PORT`   | `8080`    | Listen port  |
+
+---
 
 ## Schema
 

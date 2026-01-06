@@ -10,6 +10,27 @@
 > **Note:** The container listens on port 50051. The same port is exposed
 > when using `docker compose up`.
 
+## Environment Variables
+
+### Server Configuration
+
+| Variable | Default   | Description  |
+| -------- | --------- | ------------ |
+| `HOST`   | `0.0.0.0` | Bind address |
+| `PORT`   | `50051`   | Listen port  |
+
+### gRPC Reflection Configuration
+
+| Variable                          | Default | Description                                   |
+| --------------------------------- | ------- | --------------------------------------------- |
+| `REFLECTION_INCLUDE_DEPENDENCIES` | `false` | Include transitive dependencies in reflection |
+| `DISABLE_REFLECTION_V1`           | `false` | Disable gRPC reflection v1 API                |
+| `DISABLE_REFLECTION_V1ALPHA`      | `false` | Disable gRPC reflection v1alpha API           |
+
+These flags allow testing client compatibility with different reflection API versions.
+
+---
+
 ## Services
 
 ### Echo Service (echo.v1.Echo)
@@ -607,6 +628,8 @@ grpcurl -plaintext -d '{"service": ""}' \
 
 The server supports gRPC server reflection for service discovery (both v1 and v1alpha versions).
 
+> **Configuration:** See [Environment Variables](#environment-variables) section for reflection configuration options.
+
 ```bash
 # List all services
 grpcurl -plaintext localhost:50051 list
@@ -617,14 +640,6 @@ grpcurl -plaintext localhost:50051 describe echo.v1.Echo
 # Describe message
 grpcurl -plaintext localhost:50051 describe echo.v1.EchoRequest
 ```
-
-### Environment Variables
-
-- `REFLECTION_INCLUDE_DEPENDENCIES` (default: `false`) - Include transitive dependencies in reflection responses
-- `DISABLE_REFLECTION_V1` (default: `false`) - Disable gRPC reflection v1 API
-- `DISABLE_REFLECTION_V1ALPHA` (default: `false`) - Disable gRPC reflection v1alpha API
-
-These flags allow testing client compatibility with different reflection API versions.
 
 ## Metadata
 
