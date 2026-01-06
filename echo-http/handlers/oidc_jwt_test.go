@@ -119,7 +119,7 @@ func TestIDTokenJWTFormat(t *testing.T) {
 func TestTokenEndpointReturnsJWTIDToken(t *testing.T) {
 	// Arrange
 	SetConfig(&Config{
-		OIDCSupportedScopes: []string{"openid", "profile", "email"},
+		AuthSupportedScopes: []string{"openid", "profile", "email"},
 	})
 
 	authCode, _ := DefaultSessionStore.CreateAuthCode("http://localhost/callback", "testuser", "openid profile", "", "", "")
@@ -240,7 +240,7 @@ func TestIDTokenIssuerAndAudience(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Arrange
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			authCode, _ := DefaultSessionStore.CreateAuthCode("http://localhost/callback", tt.user, "openid profile", "", "", "")
@@ -311,7 +311,7 @@ func TestDemoPageClientIDParameter(t *testing.T) {
 	t.Run("demo flow includes client_id in token exchange", func(t *testing.T) {
 		// Arrange
 		SetConfig(&Config{
-			OIDCSupportedScopes: []string{"openid", "profile", "email"},
+			AuthSupportedScopes: []string{"openid", "profile", "email"},
 		})
 
 		r := chi.NewRouter()
@@ -557,9 +557,9 @@ func TestAuthorizeHandlerRedirectURIValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Arrange
 			SetConfig(&Config{
-				OIDCSupportedScopes:     []string{"openid", "profile", "email"},
-				OIDCValidateRedirectURI: tt.validateRedirectURI,
-				OIDCAllowedRedirectURIs: tt.allowedRedirectURIs,
+				AuthSupportedScopes:         []string{"openid", "profile", "email"},
+				AuthCodeValidateRedirectURI: tt.validateRedirectURI,
+				AuthCodeAllowedRedirectURIs: tt.allowedRedirectURIs,
 			})
 
 			r := chi.NewRouter()

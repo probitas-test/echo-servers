@@ -492,35 +492,49 @@ validation, and configurable client authentication.
 
 #### Environment Variables
 
-Configure OIDC server behavior with these environment variables:
+Configure OAuth2/OIDC server behavior with these environment variables:
 
-| Variable                     | Default                 | Description                                    |
-| ---------------------------- | ----------------------- | ---------------------------------------------- |
-| `OIDC_CLIENT_ID`             | (empty - accept any)    | Expected client_id (empty = any client_id)     |
-| `OIDC_CLIENT_SECRET`         | (empty - public client) | Required client_secret (empty = not required)  |
-| `OIDC_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes       |
-| `OIDC_REQUIRE_PKCE`          | `false`                 | Require PKCE for all clients (RFC 8252)        |
-| `OIDC_VALIDATE_REDIRECT_URI` | `false`                 | Enable redirect_uri validation                 |
-| `OIDC_ALLOWED_REDIRECT_URIS` | (empty - allow all)     | Comma-separated redirect URI patterns          |
-| `OIDC_SESSION_TTL`           | `300`                   | Session timeout in seconds                     |
-| `OIDC_TOKEN_EXPIRY`          | `3600`                  | Token expiry in seconds                        |
-| `OIDC_ENABLE_JWT_SIGNING`    | `false`                 | Enable JWT signing (currently not implemented) |
+**OAuth2 Configuration (shared across all flows):**
+
+| Variable                     | Default                 | Description                                         |
+| ---------------------------- | ----------------------- | --------------------------------------------------- |
+| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)    | Allowed client_id for validation (empty = any)      |
+| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client) | Required client_secret (empty = not required)       |
+| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`  | Comma-separated list of supported scopes            |
+| `AUTH_TOKEN_EXPIRY`          | `3600`                  | Access token expiry in seconds                      |
+
+**Authorization Code Flow Configuration:**
+
+| Variable                          | Default             | Description                                     |
+| --------------------------------- | ------------------- | ----------------------------------------------- |
+| `AUTH_CODE_REQUIRE_PKCE`          | `false`             | Require PKCE for all clients (RFC 8252)         |
+| `AUTH_CODE_SESSION_TTL`           | `300`               | Session timeout in seconds                      |
+| `AUTH_CODE_VALIDATE_REDIRECT_URI` | `false`             | Enable redirect_uri validation                  |
+| `AUTH_CODE_ALLOWED_REDIRECT_URIS` | (empty - allow all) | Comma-separated redirect URI patterns           |
+
+**OIDC Configuration (id_token specific):**
+
+| Variable                  | Default | Description                                    |
+| ------------------------- | ------- | ---------------------------------------------- |
+| `OIDC_ENABLE_JWT_SIGNING` | `false` | Enable JWT signing (currently not implemented) |
 
 **Example Configuration:**
 
 ```bash
 # Strict validation for production-like testing
-export OIDC_CLIENT_ID=my-app-client-id
-export OIDC_CLIENT_SECRET=my-app-secret
-export OIDC_SUPPORTED_SCOPES=openid,profile,email,custom_scope
-export OIDC_REQUIRE_PKCE=true
-export OIDC_VALIDATE_REDIRECT_URI=true
-export OIDC_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
+export AUTH_ALLOWED_CLIENT_ID=my-app-client-id
+export AUTH_ALLOWED_CLIENT_SECRET=my-app-secret
+export AUTH_SUPPORTED_SCOPES=openid,profile,email,custom_scope
+export AUTH_TOKEN_EXPIRY=3600
+export AUTH_CODE_REQUIRE_PKCE=true
+export AUTH_CODE_VALIDATE_REDIRECT_URI=true
+export AUTH_CODE_ALLOWED_REDIRECT_URIS=http://localhost:*,https://myapp.com/callback
+export AUTH_CODE_SESSION_TTL=300
 ```
 
 #### Redirect URI Patterns
 
-When `OIDC_VALIDATE_REDIRECT_URI=true`, supports these patterns:
+When `AUTH_CODE_VALIDATE_REDIRECT_URI=true`, supports these patterns:
 
 - **Exact match**: `http://localhost:8080/callback`
 - **Wildcard port**: `http://localhost:*/callback` (any port)

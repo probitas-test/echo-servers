@@ -181,7 +181,7 @@ func TestOIDCAuthorizeHandler_GET(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Initialize config for each test
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			r := chi.NewRouter()
@@ -500,7 +500,7 @@ func TestOIDCTokenHandler(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Initialize config for each test
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			r := chi.NewRouter()
@@ -595,8 +595,8 @@ func TestOIDCAuthorizeHandler_ClientIDValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCClientID:        tt.configClientID,
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthAllowedClientID: tt.configClientID,
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			r := chi.NewRouter()
@@ -719,9 +719,9 @@ func TestOIDCTokenHandler_ClientValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCClientID:        tt.configClientID,
-				OIDCClientSecret:    tt.configClientSec,
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthAllowedClientID:     tt.configClientID,
+				AuthAllowedClientSecret: tt.configClientSec,
+				AuthSupportedScopes:     []string{"openid", "profile", "email"},
 			})
 
 			// Create a valid auth code
@@ -838,8 +838,8 @@ func TestOIDCTokenHandler_PKCEVerification(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCClientID:        "",
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthAllowedClientID: "",
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			// Create an auth code with PKCE parameters
@@ -895,7 +895,7 @@ func TestOIDCTokenHandler_PKCEVerification(t *testing.T) {
 func TestOIDCFullFlow(t *testing.T) {
 	// Initialize config for test
 	SetConfig(&Config{
-		OIDCSupportedScopes: []string{"openid", "profile", "email"},
+		AuthSupportedScopes: []string{"openid", "profile", "email"},
 	})
 
 	r := chi.NewRouter()
@@ -1078,7 +1078,7 @@ func TestOIDCDemoHandler(t *testing.T) {
 
 func TestValidateScopes(t *testing.T) {
 	SetConfig(&Config{
-		OIDCSupportedScopes: []string{"openid", "profile", "email"},
+		AuthSupportedScopes: []string{"openid", "profile", "email"},
 	})
 
 	tests := []struct {
@@ -1193,7 +1193,7 @@ func TestGetDefaultScopes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			SetConfig(&Config{
-				OIDCSupportedScopes: tt.configScopes,
+				AuthSupportedScopes: tt.configScopes,
 			})
 
 			result := getDefaultScopes()
@@ -1253,8 +1253,8 @@ func TestOIDCAuthorizeHandler_ScopeValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCClientID:        "",
-				OIDCSupportedScopes: tt.configScopes,
+				AuthAllowedClientID: "",
+				AuthSupportedScopes: tt.configScopes,
 			})
 
 			r := chi.NewRouter()
@@ -1335,7 +1335,7 @@ func TestOIDCDiscoveryHandler_DynamicScopes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCSupportedScopes: tt.configScopes,
+				AuthSupportedScopes: tt.configScopes,
 			})
 
 			r := chi.NewRouter()
@@ -1507,9 +1507,9 @@ func TestOIDCAuthorizeHandler_PKCEValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCClientID:        "",
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
-				OIDCRequirePKCE:     tt.configRequirePKCE,
+				AuthAllowedClientID: "",
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
+				AuthCodeRequirePKCE: tt.configRequirePKCE,
 			})
 
 			r := chi.NewRouter()
@@ -1583,7 +1583,7 @@ func TestOIDC_FullFlow_WithPKCE(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Initialize config for test
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			r := chi.NewRouter()
@@ -1724,7 +1724,7 @@ func TestOIDCNonceSupport(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Initialize config
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			r := chi.NewRouter()
@@ -1906,7 +1906,7 @@ func TestCodeVerifierLengthValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup config
 			SetConfig(&Config{
-				OIDCSupportedScopes: []string{"openid", "profile", "email"},
+				AuthSupportedScopes: []string{"openid", "profile", "email"},
 			})
 
 			// Create auth code with PKCE challenge (use verifier as challenge for plain method)
@@ -1962,7 +1962,7 @@ func TestCodeVerifierLengthValidation(t *testing.T) {
 func TestCodeVerifierLengthValidationWithoutPKCE(t *testing.T) {
 	// Setup config
 	SetConfig(&Config{
-		OIDCSupportedScopes: []string{"openid", "profile", "email"},
+		AuthSupportedScopes: []string{"openid", "profile", "email"},
 	})
 
 	// Create auth code WITHOUT PKCE challenge

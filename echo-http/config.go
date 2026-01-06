@@ -12,16 +12,20 @@ type Config struct {
 	Host string
 	Port string
 
-	// OIDC Configuration
-	OIDCClientID            string
-	OIDCClientSecret        string
-	OIDCSupportedScopes     []string
-	OIDCRequirePKCE         bool
-	OIDCSessionTTL          int
-	OIDCTokenExpiry         int
-	OIDCValidateRedirectURI bool
-	OIDCAllowedRedirectURIs string
-	OIDCEnableJWTSigning    bool
+	// OAuth2 Configuration (shared across all flows)
+	AuthAllowedClientID     string
+	AuthAllowedClientSecret string
+	AuthSupportedScopes     []string
+	AuthTokenExpiry         int
+
+	// Authorization Code Flow Configuration
+	AuthCodeRequirePKCE         bool
+	AuthCodeSessionTTL          int
+	AuthCodeValidateRedirectURI bool
+	AuthCodeAllowedRedirectURIs string
+
+	// OIDC Configuration (id_token specific)
+	OIDCEnableJWTSigning bool
 }
 
 func LoadConfig() *Config {
@@ -32,16 +36,20 @@ func LoadConfig() *Config {
 		Host: getEnv("HOST", "0.0.0.0"),
 		Port: getEnv("PORT", "80"),
 
-		// OIDC settings
-		OIDCClientID:            getEnv("OIDC_CLIENT_ID", ""),
-		OIDCClientSecret:        getEnv("OIDC_CLIENT_SECRET", ""),
-		OIDCSupportedScopes:     parseScopes(getEnv("OIDC_SUPPORTED_SCOPES", "openid,profile,email")),
-		OIDCRequirePKCE:         getBoolEnv("OIDC_REQUIRE_PKCE", false),
-		OIDCSessionTTL:          getIntEnv("OIDC_SESSION_TTL", 300),
-		OIDCTokenExpiry:         getIntEnv("OIDC_TOKEN_EXPIRY", 3600),
-		OIDCValidateRedirectURI: getBoolEnv("OIDC_VALIDATE_REDIRECT_URI", true),
-		OIDCAllowedRedirectURIs: getEnv("OIDC_ALLOWED_REDIRECT_URIS", ""),
-		OIDCEnableJWTSigning:    getBoolEnv("OIDC_ENABLE_JWT_SIGNING", false),
+		// OAuth2 settings (shared across all flows)
+		AuthAllowedClientID:     getEnv("AUTH_ALLOWED_CLIENT_ID", ""),
+		AuthAllowedClientSecret: getEnv("AUTH_ALLOWED_CLIENT_SECRET", ""),
+		AuthSupportedScopes:     parseScopes(getEnv("AUTH_SUPPORTED_SCOPES", "openid,profile,email")),
+		AuthTokenExpiry:         getIntEnv("AUTH_TOKEN_EXPIRY", 3600),
+
+		// Authorization Code Flow settings
+		AuthCodeRequirePKCE:         getBoolEnv("AUTH_CODE_REQUIRE_PKCE", false),
+		AuthCodeSessionTTL:          getIntEnv("AUTH_CODE_SESSION_TTL", 300),
+		AuthCodeValidateRedirectURI: getBoolEnv("AUTH_CODE_VALIDATE_REDIRECT_URI", false),
+		AuthCodeAllowedRedirectURIs: getEnv("AUTH_CODE_ALLOWED_REDIRECT_URIS", ""),
+
+		// OIDC settings (id_token specific)
+		OIDCEnableJWTSigning: getBoolEnv("OIDC_ENABLE_JWT_SIGNING", false),
 	}
 }
 

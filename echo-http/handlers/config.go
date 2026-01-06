@@ -1,20 +1,25 @@
 package handlers
 
-// globalConfig holds the global OIDC configuration.
-// It will be used by OIDC handlers in Milestone 2 and beyond.
+// globalConfig holds the global OAuth2/OIDC configuration.
+// It is used by authentication handlers.
 var globalConfig *Config
 
-// Config holds the OIDC configuration for handlers.
+// Config holds the OAuth2/OIDC configuration for handlers.
 type Config struct {
-	OIDCClientID            string
-	OIDCClientSecret        string
-	OIDCSupportedScopes     []string
-	OIDCRequirePKCE         bool
-	OIDCSessionTTL          int
-	OIDCTokenExpiry         int
-	OIDCValidateRedirectURI bool
-	OIDCAllowedRedirectURIs string
-	OIDCEnableJWTSigning    bool
+	// OAuth2 Configuration (shared across all flows)
+	AuthAllowedClientID     string
+	AuthAllowedClientSecret string
+	AuthSupportedScopes     []string
+	AuthTokenExpiry         int
+
+	// Authorization Code Flow Configuration
+	AuthCodeRequirePKCE         bool
+	AuthCodeSessionTTL          int
+	AuthCodeValidateRedirectURI bool
+	AuthCodeAllowedRedirectURIs string
+
+	// OIDC Configuration (id_token specific)
+	OIDCEnableJWTSigning bool
 }
 
 // SetConfig sets the global configuration for handlers.

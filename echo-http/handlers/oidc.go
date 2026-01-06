@@ -51,8 +51,8 @@ func OIDCDiscoveryHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get scopes from config, or use defaults if not configured
 	supportedScopes := []string{"openid", "profile", "email"}
-	if globalConfig != nil && len(globalConfig.OIDCSupportedScopes) > 0 {
-		supportedScopes = globalConfig.OIDCSupportedScopes
+	if globalConfig != nil && len(globalConfig.AuthSupportedScopes) > 0 {
+		supportedScopes = globalConfig.AuthSupportedScopes
 	}
 
 	discovery := OIDCDiscoveryResponse{
@@ -92,7 +92,7 @@ func validateScopes(requestedScope string) error {
 	}
 
 	requestedScopes := strings.Split(requestedScope, " ")
-	supportedScopes := globalConfig.OIDCSupportedScopes
+	supportedScopes := globalConfig.AuthSupportedScopes
 
 	for _, rs := range requestedScopes {
 		rs = strings.TrimSpace(rs)
@@ -119,7 +119,7 @@ func validateScopes(requestedScope string) error {
 // getDefaultScopes returns default scopes as a space-separated string.
 // Returns all configured scopes joined by spaces.
 func getDefaultScopes() string {
-	return strings.Join(globalConfig.OIDCSupportedScopes, " ")
+	return strings.Join(globalConfig.AuthSupportedScopes, " ")
 }
 
 // OIDCAuthorizeHandler handles OIDC authorization requests
@@ -147,7 +147,7 @@ func OIDCAuthorizeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Validate client_id value if configured
-		if globalConfig != nil && globalConfig.OIDCClientID != "" && clientID != globalConfig.OIDCClientID {
+		if globalConfig != nil && globalConfig.AuthAllowedClientID != "" && clientID != globalConfig.AuthAllowedClientID {
 			writeAuthorizationError(w, r, ErrorUnauthorizedClient, "unknown client_id", state, redirectURI)
 			return
 		}
@@ -159,11 +159,11 @@ func OIDCAuthorizeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Validate redirect_uri if validation is enabled
-		if globalConfig != nil && globalConfig.OIDCValidateRedirectURI {
+		if globalConfig != nil && globalConfig.AuthCodeValidateRedirectURI {
 			var allowedPatterns []string
-			if globalConfig.OIDCAllowedRedirectURIs != "" {
+			if globalConfig.AuthCodeAllowedRedirectURIs != "" {
 				// Split comma-separated patterns
-				for _, pattern := range strings.Split(globalConfig.OIDCAllowedRedirectURIs, ",") {
+				for _, pattern := range strings.Split(globalConfig.AuthCodeAllowedRedirectURIs, ",") {
 					if trimmed := strings.TrimSpace(pattern); trimmed != "" {
 						allowedPatterns = append(allowedPatterns, trimmed)
 					}
@@ -192,7 +192,7 @@ func OIDCAuthorizeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Validate PKCE parameters
-		if globalConfig != nil && globalConfig.OIDCRequirePKCE && codeChallenge == "" {
+		if globalConfig != nil && globalConfig.AuthCodeRequirePKCE && codeChallenge == "" {
 			writeAuthorizationError(w, r, ErrorInvalidRequest, "code_challenge is required", state, redirectURI)
 			return
 		}
@@ -394,14 +394,14 @@ func OIDCTokenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate client_id value if configured
-	if globalConfig != nil && globalConfig.OIDCClientID != "" && clientID != globalConfig.OIDCClientID {
+	if globalConfig != nil && globalConfig.AuthAllowedClientID != "" && clientID != globalConfig.AuthAllowedClientID {
 		writeOIDCError(w, http.StatusUnauthorized, ErrorInvalidClient, "unknown client_id")
 		return
 	}
 
 	// Validate client_secret if configured (confidential client)
-	if globalConfig != nil && globalConfig.OIDCClientSecret != "" {
-		if clientSecret != globalConfig.OIDCClientSecret {
+	if globalConfig != nil && globalConfig.AuthAllowedClientSecret != "" {
+		if clientSecret != globalConfig.AuthAllowedClientSecret {
 			writeOIDCError(w, http.StatusUnauthorized, ErrorInvalidClient, "invalid client_secret")
 			return
 		}
