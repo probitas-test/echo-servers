@@ -36,5 +36,11 @@ tidy:
 fmt-check:
     @out="$(gofmt -l . && goimports -l .)" || exit 1; if [ -n "$out" ]; then echo "Not formatted (run \`just fmt\`):"; echo "$out"; exit 1; fi
 
+# In CI, fail when build changed the committed generated code or produced
+# files that are not committed (locally that is work in progress)
+[private]
+generated-check:
+    @if [ -n "${CI:-}" ] && [ -n "$(git status --porcelain -- graph/generated.go graph/models_gen.go)" ]; then echo "Generated code is out of date; run \`just build\` and commit it:"; git status --short -- graph/generated.go graph/models_gen.go; exit 1; fi
+
 # Everything CI runs for this server
-ci: lint fmt-check test build
+ci: lint fmt-check test build generated-check
