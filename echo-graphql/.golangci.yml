@@ -22,4 +22,4 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/jsr-probitas
+        - github.com/probitas-test
