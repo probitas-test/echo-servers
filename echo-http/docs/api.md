@@ -23,10 +23,10 @@
 
 Shared credentials used across all authentication methods.
 
-| Variable                 | Default    | Description                                                    |
-| ------------------------ | ---------- | -------------------------------------------------------------- |
-| `AUTH_ALLOWED_USERNAME`  | `testuser` | Username for Basic Auth, Bearer Token, and OAuth2/OIDC flows   |
-| `AUTH_ALLOWED_PASSWORD`  | `testpass` | Password for Basic Auth, Bearer Token, and OAuth2/OIDC flows   |
+| Variable                | Default    | Description                                                  |
+| ----------------------- | ---------- | ------------------------------------------------------------ |
+| `AUTH_ALLOWED_USERNAME` | `testuser` | Username for Basic Auth, Bearer Token, and OAuth2/OIDC flows |
+| `AUTH_ALLOWED_PASSWORD` | `testpass` | Password for Basic Auth, Bearer Token, and OAuth2/OIDC flows |
 
 ### OAuth2/OIDC Configuration
 
@@ -34,13 +34,13 @@ Configure OAuth2/OIDC server behavior with these environment variables:
 
 **OAuth2 Configuration (shared across all flows):**
 
-| Variable                     | Default                                                           | Description                                    |
-| ---------------------------- | ----------------------------------------------------------------- | ---------------------------------------------- |
-| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)                                              | Allowed client_id for validation (empty = any) |
-| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client)                                           | Required client_secret (empty = not required)  |
-| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`                                            | Comma-separated list of supported scopes       |
-| `AUTH_TOKEN_EXPIRY`          | `3600`                                                            | Access token expiry in seconds                 |
-| `AUTH_ALLOWED_GRANT_TYPES`   | `authorization_code,client_credentials,password,refresh_token`    | Comma-separated list of allowed grant types    |
+| Variable                     | Default                                                        | Description                                    |
+| ---------------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| `AUTH_ALLOWED_CLIENT_ID`     | (empty - accept any)                                           | Allowed client_id for validation (empty = any) |
+| `AUTH_ALLOWED_CLIENT_SECRET` | (empty - public client)                                        | Required client_secret (empty = not required)  |
+| `AUTH_SUPPORTED_SCOPES`      | `openid,profile,email`                                         | Comma-separated list of supported scopes       |
+| `AUTH_TOKEN_EXPIRY`          | `3600`                                                         | Access token expiry in seconds                 |
+| `AUTH_ALLOWED_GRANT_TYPES`   | `authorization_code,client_credentials,password,refresh_token` | Comma-separated list of allowed grant types    |
 
 **Authorization Code Flow Configuration:**
 

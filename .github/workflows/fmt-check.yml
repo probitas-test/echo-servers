@@ -1,0 +1,34 @@
+name: Format
+
+# The formatting that spans the repository (Markdown/JSON/YAML and Nix). The
+# per-server build workflows check each server's Go code; this one runs on
+# every change, since any file can need formatting.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A pull request only needs its latest commit checked. A run on main waits for
+# the one before it instead of cancelling it.
+concurrency:
+  group: fmt-check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  fmt-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: nixbuild/nix-quick-install-action@v35
+      # Load the development shell (flake.nix) into the job, so the steps
+      # below run the same commands as local development.
+      - uses: nicknovitski/nix-develop@v1
+      # The same check as local development (justfile).
+      - run: just fmt-check

@@ -1,5 +1,6 @@
 .DS_Store
 .worktrees
+/.claude/worktrees/
 
 # Nix
 result
@@ -13,3 +14,4 @@ echo-connectrpc/echo-connectrpc
 
 # Environment
 .env
+/.envrc

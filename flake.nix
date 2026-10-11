@@ -3,16 +3,22 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        devShells.default = pkgs.mkShell {
+  outputs =
+    { self, nixpkgs }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+    in
+    {
+      devShells = forAllSystems (pkgs: {
+        default = pkgs.mkShell {
           packages = with pkgs; [
             # Go
             go
@@ -33,8 +39,9 @@
             # Task runner
             just
 
-            # Formatter
+            # Formatters
             dprint
+            nixfmt
           ];
 
           shellHook = ''
@@ -42,6 +49,8 @@
             echo "Go $(go version | cut -d' ' -f3)"
           '';
         };
-      }
-    );
+      });
+
+      formatter = forAllSystems (pkgs: pkgs.nixfmt);
+    };
 }

@@ -14,11 +14,14 @@ test:
 build: generate
     go build -o echo-grpc .
 
+# protoc does not group imports the way goimports does; format the output so
+# the generated files match what `just fmt` and `fmt-check` expect.
 [private]
 generate:
     protoc -I proto --go_out=proto --go_opt=paths=source_relative \
         --go-grpc_out=proto --go-grpc_opt=paths=source_relative \
         proto/*.proto
+    goimports -w proto
 
 # Run server locally
 run:
@@ -36,3 +39,16 @@ clean:
 # Tidy dependencies
 tidy:
     go mod tidy
+
+# Check formatting without changing files
+fmt-check:
+    @out="$(gofmt -l . && goimports -l .)" || exit 1; if [ -n "$out" ]; then echo "Not formatted (run \`just fmt\`):"; echo "$out"; exit 1; fi
+
+# In CI, fail when build changed the committed generated code or produced
+# files that are not committed (locally that is work in progress)
+[private]
+generated-check:
+    @if [ -n "${CI:-}" ] && [ -n "$(git status --porcelain -- proto)" ]; then echo "Generated code is out of date; run \`just build\` and commit it:"; git status --short -- proto; exit 1; fi
+
+# Everything CI runs for this server
+ci: lint fmt-check test build generated-check
