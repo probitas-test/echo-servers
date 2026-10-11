@@ -36,3 +36,10 @@ clean:
 # Tidy dependencies
 tidy:
     go mod tidy
+
+# Check formatting without changing files
+fmt-check:
+    @out="$(gofmt -l . && goimports -l .)" || exit 1; if [ -n "$out" ]; then echo "Not formatted (run \`just fmt\`):"; echo "$out"; exit 1; fi
+
+# Everything CI runs for this server
+ci: lint fmt-check test build

@@ -100,6 +100,9 @@ environment).
 # Show available commands
 just
 
+# Run everything CI runs (lint, format check, test and build for every server)
+just ci
+
 # Run linter on all packages
 just lint
 
@@ -109,7 +112,7 @@ just test
 # Build all packages
 just build
 
-# Format all code (Go + Markdown/JSON/YAML)
+# Format all code (Go + Markdown/JSON/YAML + Nix)
 just fmt
 
 # Build and run Docker images
