@@ -14,37 +14,25 @@ on:
       - "flake.*"
       - ".github/workflows/build.echo-graphql.yml"
 
+# A pull request only needs its latest commit checked. A run on main waits for
+# the one before it instead of cancelling it.
+concurrency:
+  group: build-echo-graphql-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: "write"
-      contents: "read"
-    steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-graphql::lint
-      - run: nix develop -c just echo-graphql::fmt
-      - run: git diff --exit-code
-
-  test:
-    needs: check
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: "write"
-      contents: "read"
-    steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-graphql::test
-
   build:
-    needs: check
     runs-on: ubuntu-latest
-    permissions:
-      id-token: "write"
-      contents: "read"
     steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-graphql::build
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: nixbuild/nix-quick-install-action@v35
+      # Load the development shell (flake.nix) into the job, so the steps
+      # below run the same commands as local development.
+      - uses: nicknovitski/nix-develop@v1
+      # The same gate as local development (echo-graphql/justfile).
+      - run: just echo-graphql::ci

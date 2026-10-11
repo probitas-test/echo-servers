@@ -14,28 +14,25 @@ on:
       - "flake.*"
       - ".github/workflows/build.echo-http.yml"
 
+# A pull request only needs its latest commit checked. A run on main waits for
+# the one before it instead of cancelling it.
+concurrency:
+  group: build-echo-http-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-http::lint
-      - run: nix develop -c just echo-http::fmt
-      - run: git diff --exit-code
-
-  test:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-http::test
-
   build:
-    needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
-      - run: nix develop -c just echo-http::build
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: nixbuild/nix-quick-install-action@v35
+      # Load the development shell (flake.nix) into the job, so the steps
+      # below run the same commands as local development.
+      - uses: nicknovitski/nix-develop@v1
+      # The same gate as local development (echo-http/justfile).
+      - run: just echo-http::ci
